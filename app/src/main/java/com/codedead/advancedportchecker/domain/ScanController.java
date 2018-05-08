@@ -3,7 +3,10 @@ package com.codedead.advancedportchecker.domain;
 import android.os.AsyncTask;
 
 import com.codedead.advancedportchecker.interfaces.AsyncResponse;
-import com.codedead.advancedportchecker.net.NetController;
+
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
@@ -11,14 +14,12 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     private int startPort;
     private int endPort;
     private int timeOut;
-    private ScanMethod scanMethod;
 
-    private boolean cancel;
     private AsyncResponse response;
 
     public ScanController(String host, int startPort,
                           int endPort, int timeOut,
-                          ScanMethod scanMethod, AsyncResponse response) {
+                          AsyncResponse response) {
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
         if (response == null) throw new NullPointerException("AsyncResponse delegate cannot be null!");
 
@@ -26,8 +27,6 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         this.startPort = startPort;
         this.endPort = endPort;
         this.timeOut = timeOut;
-        this.scanMethod = scanMethod;
-        this.cancel = false;
 
         this.response = response;
     }
@@ -36,21 +35,8 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     protected Void doInBackground(Void... voids) {
         int currentPort = startPort;
         while (currentPort <= endPort) {
-            if (cancel) break;
-
-            switch (scanMethod) {
-                case TCP:
-                    publishProgress(NetController.scanTcp(host, currentPort, timeOut));
-                    break;
-                case UDP:
-                    publishProgress(NetController.scanUdp(host, currentPort, timeOut));
-                    break;
-                case All:
-                    publishProgress(NetController.scanTcp(host, currentPort, timeOut));
-                    publishProgress(NetController.scanUdp(host, currentPort, timeOut));
-                    break;
-            }
-
+            if (isCancelled()) break;
+            publishProgress(scanTcp(host, currentPort, timeOut));
             currentPort++;
         }
         return null;
@@ -66,5 +52,23 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     protected void onProgressUpdate(ScanProgress... values) {
         response.reportProgress(values[0]);
         super.onProgressUpdate(values);
+    }
+
+    private static ScanProgress scanTcp(String host, int port, int timeOut) {
+        ScanProgress scan = new ScanProgress(host, port);
+        try {
+            Socket socket = new Socket();
+            socket.connect(new InetSocketAddress(host, port), timeOut);
+            socket.close();
+            scan.setStatus("OPEN");
+        } catch (SocketTimeoutException ce) {
+            ce.printStackTrace();
+            scan.setStatus("TIMEOUT");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            scan.setStatus("CLOSED");
+        }
+
+        return scan;
     }
 }

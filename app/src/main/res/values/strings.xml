@@ -7,10 +7,4 @@
     <string name="string_port_to">To:</string>
     <string name="string_scan">Scan</string>
 
-    <string-array name="array_scanmethods">
-        <item>TCP</item>
-        <item>UDP</item>
-        <item>Both</item>
-    </string-array>
-
 </resources>

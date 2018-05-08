@@ -4,16 +4,14 @@ public class ScanProgress {
 
     private String host;
     private int port;
-    private ScanMethod scanMethod;
     private String status;
 
-    public ScanProgress(String host, int port, ScanMethod scanMethod) {
+    public ScanProgress(String host, int port) {
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
         if (status == null || status.isEmpty()) throw new NullPointerException("Status cannot be null or empty!");
 
         this.host = host;
         this.port = port;
-        this.scanMethod = scanMethod;
         this.status = "";
     }
 
@@ -34,7 +32,7 @@ public class ScanProgress {
         return status;
     }
 
-    public ScanMethod getScanMethod() {
-        return scanMethod;
+    public String getFullHost() {
+        return host + ":" + port;
     }
 }

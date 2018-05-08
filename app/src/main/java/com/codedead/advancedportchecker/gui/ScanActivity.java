@@ -1,5 +1,6 @@
 package com.codedead.advancedportchecker.gui;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,8 +14,11 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.codedead.advancedportchecker.R;
+import com.codedead.advancedportchecker.domain.ScanController;
+import com.codedead.advancedportchecker.domain.ScanProgress;
+import com.codedead.advancedportchecker.interfaces.AsyncResponse;
 
-public class ScanActivity extends AppCompatActivity {
+public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
     private EditText edtHost;
     private EditText edtStartPort;
@@ -22,12 +26,13 @@ public class ScanActivity extends AppCompatActivity {
     private EditText edtOutput;
     private ProgressBar pgbScan;
 
+    private ScanController scanController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        Spinner spnScanMethod = findViewById(R.id.SpnScanMethod);
         edtHost = findViewById(R.id.EdtHost);
         edtStartPort = findViewById(R.id.EdtStartPort);
         edtEndPort = findViewById(R.id.EdtEndPort);
@@ -36,13 +41,18 @@ public class ScanActivity extends AppCompatActivity {
 
         Button btnScan = findViewById(R.id.BtnScan);
 
-        spnScanMethod.setSelection(0);
         edtOutput.setKeyListener(null);
 
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setControlModifiers(!edtHost.isEnabled());
+
+                if (scanController != null && !scanController.isCancelled()) {
+                    stopScan();
+                } else {
+                    startScan();
+                }
             }
         });
     }
@@ -51,6 +61,17 @@ public class ScanActivity extends AppCompatActivity {
         edtHost.setEnabled(enabled);
         edtStartPort.setEnabled(enabled);
         edtEndPort.setEnabled(enabled);
+    }
+
+    private void startScan() {
+        if (!scanController.isCancelled()) return;
+        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 5000, this);
+        scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void stopScan() {
+        if (scanController == null) return;
+        scanController.cancel(true);
     }
 
     @Override
@@ -72,5 +93,19 @@ public class ScanActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void scanComplete() {
+        setControlModifiers(true);
+        scanController = null;
+    }
+
+    @Override
+    public void reportProgress(ScanProgress progress) {
+        if (!edtOutput.getText().toString().isEmpty()) {
+            edtOutput.append("\n");
+        }
+        edtOutput.append(progress.getFullHost() + " | " + progress.getStatus());
     }
 }

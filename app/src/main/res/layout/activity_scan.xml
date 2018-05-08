@@ -21,33 +21,16 @@
             android:layout_margin="3dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/EdtHost"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/EdtHost"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_edittext"
-                    android:hint="@string/string_localhost"
-                    android:maxLines="1"
-                    android:inputType="text" />
-
-                <Spinner
-                    android:id="@+id/SpnScanMethod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/custom_spinner"
-                    android:entries="@array/array_scanmethods">
-
-                </Spinner>
-
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_edittext"
+                android:hint="@string/string_localhost"
+                android:inputType="text"
+                android:maxLines="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
