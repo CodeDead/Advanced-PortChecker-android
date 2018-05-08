@@ -28,13 +28,14 @@
 
                 <EditText
                     android:id="@+id/EdtHost"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_edittext"
-                    android:hint="127.0.0.1"
-                    android:maxLines="1" />
+                    android:hint="@string/string_localhost"
+                    android:maxLines="1"
+                    android:inputType="text" />
 
                 <Spinner
                     android:id="@+id/SpnScanMethod"
@@ -57,16 +58,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:text="From:" />
+                    android:text="@string/string_port_from" />
 
                 <EditText
                     android:id="@+id/EdtStartPort"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_edittext"
-                    android:hint="1"
+                    android:hint="@string/string_hint_one"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
 
@@ -74,16 +75,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:text="To:" />
+                    android:text="@string/string_port_to" />
 
                 <EditText
                     android:id="@+id/EdtEndPort"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_edittext"
-                    android:hint="1"
+                    android:hint="@string/string_hint_one"
                     android:inputType="numberDecimal"
                     android:maxLines="1" />
 
@@ -98,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
-                    android:text="Scan" />
+                    android:text="@string/string_scan" />
 
             </LinearLayout>
 
@@ -113,7 +114,9 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_margin="3dp"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:inputType="text"
+        tools:ignore="LabelFor" />
 
     <ProgressBar
         android:id="@+id/PgbScanProgress"

@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Advanced PortChecker</string>
     <string name="string_logo">Logo</string>
+    <string name="string_localhost">127.0.0.1</string>
+    <string name="string_hint_one">1</string>
+    <string name="string_port_from">From:</string>
+    <string name="string_port_to">To:</string>
+    <string name="string_scan">Scan</string>
 
     <string-array name="array_scanmethods">
         <item>TCP</item>
