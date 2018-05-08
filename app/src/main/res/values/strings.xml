@@ -6,5 +6,8 @@
     <string name="string_port_from">From:</string>
     <string name="string_port_to">To:</string>
     <string name="string_scan">Scan</string>
+    <string name="string_wait_scancontroller">Please wait for the scan to finish up!</string>
+    <string name="string_scan_cancelled">Scan cancelled!</string>
+    <string name="string_scan_complete">Scan complete!</string>
 
 </resources>

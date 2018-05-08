@@ -8,7 +8,6 @@ public class ScanProgress {
 
     public ScanProgress(String host, int port) {
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
-        if (status == null || status.isEmpty()) throw new NullPointerException("Status cannot be null or empty!");
 
         this.host = host;
         this.port = port;

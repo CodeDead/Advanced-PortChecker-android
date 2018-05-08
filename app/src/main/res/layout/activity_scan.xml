@@ -93,12 +93,10 @@
     <EditText
         android:background="@drawable/custom_edittext"
         android:id="@+id/EdtScanOutput"
-        android:gravity="top|start"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_margin="3dp"
         android:layout_height="0dp"
-        android:inputType="text"
         tools:ignore="LabelFor" />
 
     <ProgressBar

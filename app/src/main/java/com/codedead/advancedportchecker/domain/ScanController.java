@@ -1,9 +1,11 @@
 package com.codedead.advancedportchecker.domain;
 
 import android.os.AsyncTask;
+import android.widget.EditText;
 
 import com.codedead.advancedportchecker.interfaces.AsyncResponse;
 
+import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -15,19 +17,23 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     private int endPort;
     private int timeOut;
 
+    private WeakReference<EditText> edtOutput;
+
     private AsyncResponse response;
 
     public ScanController(String host, int startPort,
                           int endPort, int timeOut,
-                          AsyncResponse response) {
+                          EditText edtOutput, AsyncResponse response) {
+
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
+        if (edtOutput == null) throw new NullPointerException("Output canot be null!");
         if (response == null) throw new NullPointerException("AsyncResponse delegate cannot be null!");
 
         this.host = host;
         this.startPort = startPort;
         this.endPort = endPort;
         this.timeOut = timeOut;
-
+        this.edtOutput = new WeakReference<>(edtOutput);
         this.response = response;
     }
 
@@ -35,7 +41,10 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     protected Void doInBackground(Void... voids) {
         int currentPort = startPort;
         while (currentPort <= endPort) {
-            if (isCancelled()) break;
+            if (isCancelled()) {
+                onCancelled();
+                break;
+            }
             publishProgress(scanTcp(host, currentPort, timeOut));
             currentPort++;
         }
@@ -50,7 +59,12 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
     @Override
     protected void onProgressUpdate(ScanProgress... values) {
-        response.reportProgress(values[0]);
+        if (edtOutput.get() == null) return;
+
+        if (!edtOutput.get().getText().toString().isEmpty()) {
+            edtOutput.get().append("\n");
+        }
+        edtOutput.get().append(values[0].getFullHost() + " | " + values[0].getStatus());
         super.onProgressUpdate(values);
     }
 
@@ -70,5 +84,11 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         }
 
         return scan;
+    }
+
+    @Override
+    protected void onCancelled() {
+        response.scanCancelled();
+        super.onCancelled();
     }
 }

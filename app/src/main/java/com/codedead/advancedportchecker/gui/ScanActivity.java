@@ -9,9 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.ScanController;
@@ -24,6 +23,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private EditText edtStartPort;
     private EditText edtEndPort;
     private EditText edtOutput;
+    private Button btnScan;
     private ProgressBar pgbScan;
 
     private ScanController scanController;
@@ -36,10 +36,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         edtHost = findViewById(R.id.EdtHost);
         edtStartPort = findViewById(R.id.EdtStartPort);
         edtEndPort = findViewById(R.id.EdtEndPort);
+        btnScan = findViewById(R.id.BtnScan);
         edtOutput = findViewById(R.id.EdtScanOutput);
         pgbScan = findViewById(R.id.PgbScanProgress);
-
-        Button btnScan = findViewById(R.id.BtnScan);
 
         edtOutput.setKeyListener(null);
 
@@ -50,8 +49,10 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
                 if (scanController != null && !scanController.isCancelled()) {
                     stopScan();
-                } else {
+                } else if (scanController == null) {
                     startScan();
+                } else {
+                    Toast.makeText(ScanActivity.this, R.string.string_wait_scancontroller, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -64,8 +65,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     }
 
     private void startScan() {
-        if (!scanController.isCancelled()) return;
-        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 5000, this);
+        if (scanController != null && !scanController.isCancelled()) return;
+        edtOutput.setText("");
+        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 5000, edtOutput, this);
         scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -95,17 +97,39 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         return super.onOptionsItemSelected(item);
     }
 
+    private void addCancelText() {
+        if (!edtOutput.getText().toString().isEmpty()) {
+            edtOutput.append("\n");
+        }
+
+        edtOutput.append(getString(R.string.string_scan_cancelled));
+    }
+
     @Override
     public void scanComplete() {
         setControlModifiers(true);
         scanController = null;
-    }
 
-    @Override
-    public void reportProgress(ScanProgress progress) {
         if (!edtOutput.getText().toString().isEmpty()) {
             edtOutput.append("\n");
         }
-        edtOutput.append(progress.getFullHost() + " | " + progress.getStatus());
+        edtOutput.append(getString(R.string.string_scan_complete));
+    }
+
+    @Override
+    public void scanCancelled() {
+        setControlModifiers(true);
+        scanController = null;
+
+        addCancelText();
+    }
+
+    @Override
+    protected void onPause() {
+        if (scanController != null && !scanController.isCancelled()) {
+            scanController.cancel(true);
+            addCancelText();
+        }
+        super.onPause();
     }
 }
