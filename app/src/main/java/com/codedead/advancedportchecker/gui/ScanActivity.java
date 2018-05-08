@@ -67,7 +67,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
         edtOutput.setText("");
-        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 5000, edtOutput, this);
+        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 2000, edtOutput, this);
         scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -120,7 +120,6 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     public void scanCancelled() {
         setControlModifiers(true);
         scanController = null;
-
         addCancelText();
     }
 

@@ -42,7 +42,6 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         int currentPort = startPort;
         while (currentPort <= endPort) {
             if (isCancelled()) {
-                onCancelled();
                 break;
             }
             publishProgress(scanTcp(host, currentPort, timeOut));
@@ -59,6 +58,7 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
     @Override
     protected void onProgressUpdate(ScanProgress... values) {
+        if (isCancelled()) return;
         if (edtOutput.get() == null) return;
 
         if (!edtOutput.get().getText().toString().isEmpty()) {
@@ -76,10 +76,8 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
             socket.close();
             scan.setStatus("OPEN");
         } catch (SocketTimeoutException ce) {
-            ce.printStackTrace();
             scan.setStatus("TIMEOUT");
         } catch (Exception ex) {
-            ex.printStackTrace();
             scan.setStatus("CLOSED");
         }
 
