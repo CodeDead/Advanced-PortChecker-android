@@ -131,7 +131,6 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     protected void onPause() {
         if (scanController != null && !scanController.isCancelled()) {
             scanController.cancel(true);
-            addCancelText();
         }
         super.onPause();
     }
