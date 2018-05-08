@@ -9,5 +9,6 @@
     <string name="string_wait_scancontroller">Please wait for the scan to finish up!</string>
     <string name="string_scan_cancelled">Scan cancelled!</string>
     <string name="string_scan_complete">Scan complete!</string>
+    <string name="string_cancel_scan">Cancel</string>
 
 </resources>
