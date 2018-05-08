@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Advanced PortChecker</string>
+    <string name="string_logo">Logo</string>
+
+    <string-array name="array_scanmethods">
+        <item>TCP</item>
+        <item>UDP</item>
+        <item>Both</item>
+    </string-array>
+
+</resources>

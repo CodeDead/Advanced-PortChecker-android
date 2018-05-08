@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_scan_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        app:showAsAction="ifRoom"
+        android:title="Settings">
+
+    </item>
+
+    <item android:id="@+id/nav_scan_about"
+        android:title="About">
+
+    </item>
+
+    <item android:id="@+id/nav_scan_exit"
+        android:title="Exit">
+
+    </item>
+</menu>
