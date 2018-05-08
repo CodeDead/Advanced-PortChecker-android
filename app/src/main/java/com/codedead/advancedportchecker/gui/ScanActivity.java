@@ -27,6 +27,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private ProgressBar pgbScan;
 
     private ScanController scanController;
+    private int progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +63,24 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         edtHost.setEnabled(enabled);
         edtStartPort.setEnabled(enabled);
         edtEndPort.setEnabled(enabled);
+
+        if (enabled) {
+            pgbScan.setVisibility(View.GONE);
+        } else {
+            int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString());
+            pgbScan.setMax(max);
+            pgbScan.setVisibility(View.VISIBLE);
+        }
     }
 
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
         edtOutput.setText("");
-        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 2000, edtOutput, this);
+        progress = 0;
+
+        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString())
+                , Integer.parseInt(edtEndPort.getText().toString()), 2000, this);
+
         scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         btnScan.setText(getString(R.string.string_cancel_scan));
@@ -125,6 +138,18 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         scanController = null;
         addCancelText();
         btnScan.setText(getString(R.string.string_scan));
+    }
+
+    @Override
+    public void update(ScanProgress scanProgress) {
+        progress++;
+
+        if (!edtOutput.getText().toString().isEmpty()) {
+            edtOutput.append("\n");
+        }
+        edtOutput.append(scanProgress.getFullHost() + " | " + scanProgress.getStatus());
+
+        pgbScan.setProgress(progress);
     }
 
     @Override

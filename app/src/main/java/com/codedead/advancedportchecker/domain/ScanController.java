@@ -1,11 +1,9 @@
 package com.codedead.advancedportchecker.domain;
 
 import android.os.AsyncTask;
-import android.widget.EditText;
 
 import com.codedead.advancedportchecker.interfaces.AsyncResponse;
 
-import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -17,23 +15,19 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     private int endPort;
     private int timeOut;
 
-    private WeakReference<EditText> edtOutput;
-
     private AsyncResponse response;
 
     public ScanController(String host, int startPort,
                           int endPort, int timeOut,
-                          EditText edtOutput, AsyncResponse response) {
+                          AsyncResponse response) {
 
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
-        if (edtOutput == null) throw new NullPointerException("Output canot be null!");
         if (response == null) throw new NullPointerException("AsyncResponse delegate cannot be null!");
 
         this.host = host;
         this.startPort = startPort;
         this.endPort = endPort;
         this.timeOut = timeOut;
-        this.edtOutput = new WeakReference<>(edtOutput);
         this.response = response;
     }
 
@@ -59,12 +53,8 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     @Override
     protected void onProgressUpdate(ScanProgress... values) {
         if (isCancelled()) return;
-        if (edtOutput.get() == null) return;
 
-        if (!edtOutput.get().getText().toString().isEmpty()) {
-            edtOutput.get().append("\n");
-        }
-        edtOutput.get().append(values[0].getFullHost() + " | " + values[0].getStatus());
+        response.update(values[0]);
         super.onProgressUpdate(values);
     }
 
@@ -74,11 +64,11 @@ public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(host, port), timeOut);
             socket.close();
-            scan.setStatus("OPEN");
+            scan.setStatus(ScanStatus.OPEN);
         } catch (SocketTimeoutException ce) {
-            scan.setStatus("TIMEOUT");
+            scan.setStatus(ScanStatus.TIMEOUT);
         } catch (Exception ex) {
-            scan.setStatus("CLOSED");
+            scan.setStatus(ScanStatus.CLOSED);
         }
 
         return scan;
