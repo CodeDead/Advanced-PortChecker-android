@@ -13,11 +13,29 @@
 
     <string name="string_about">About</string>
     <string name="string_help">Help</string>
-    <string name="preferences_file_key" translatable="false">apsettings</string>
     <string name="text_about">Advanced PortChecker was created by DeadLine.\n\nThis application can be used to scan a host for open TCP ports. Please make sure that you have the appropriate permissions before scanning a host!\n\nImages by: Google\n\nCopyright © CodeDead 2018</string>
-    <string name="btn_website">Website</string>
-    <string name="btn_support">Support</string>
     <string name="text_help">Advanced PortChecker is an application that you can use to scan a host for open/closed TCP ports. Please make sure that you have permission to scan a host before initiating the scan!\n\nA TCP port ranges from 1 to 65535.\nThe time-out is the time it takes before an active connection is closed. If your internet is slow and/or unresponsive, it is recommended to increase the time-out because your results might not be accurate.\n\nIf you happen to find a bug, you\'re welcome to send us an email!</string>
     <string name="text_send_mail">Send us a mail!</string>
+    <string name="title_activity_settings">Advanced PortChecker - Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <!-- Example settings for Data & Sync -->
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="string_keep_screen_on">Keep screen on</string>
+    <string name="string_screenOn_hint">Recommended for large port scans</string>
+    <string name="string_display_timeouts">Display ports that have timed-out</string>
+    <string name="string_display_closed">Display ports that are closed</string>
+    <string name="string_socket_timeout">Socket time-out</string>
+    <string name="string_vibrate_on_complete">Vibrate when scan has completed</string>
+    <string name="string_socket_timeout_summary">The time it takes before a connection is marked as timed-out</string>
+    <string name="string_reset_settings">Reset all settings</string>
+    <string name="string_confirm_reset">Are you sure you want to reset all settings to their default values?</string>
 
 </resources>

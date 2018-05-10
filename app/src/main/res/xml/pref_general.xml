@@ -1,0 +1,29 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="displayTimeOut"
+        android:title="@string/string_display_timeouts" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="displayClosed"
+        android:title="@string/string_display_closed" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="keepScreenOn"
+        android:summary="@string/string_screenOn_hint"
+        android:title="@string/string_keep_screen_on" />
+
+    <EditTextPreference
+        android:defaultValue="200"
+        android:inputType="numberSigned"
+        android:key="socketTimeout"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/string_socket_timeout"
+        android:summary="@string/string_socket_timeout_summary"/>
+
+</PreferenceScreen>

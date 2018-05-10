@@ -5,6 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,13 +40,17 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private int progress;
 
     private SharedPreferences sharedPreferences;
+    private boolean displayTimedOut;
+    private boolean displayClosed;
+    private int timeOut;
+    private boolean vibrateOnComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -66,6 +75,34 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        if (sharedPreferences.getBoolean("keepScreenOn", true)) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+
+        displayTimedOut = sharedPreferences.getBoolean("displayTimeOut", true);
+        displayClosed = sharedPreferences.getBoolean("displayClosed", true);
+        timeOut = Integer.parseInt(sharedPreferences.getString("socketTimeout", "200"));
+        vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
+        super.onResume();
+    }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (v == null) return;
+
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        }else{
+            //deprecated in API 26
+            v.vibrate(500);
+        }
     }
 
     private void setControlModifiers(boolean enabled) {
@@ -147,8 +184,6 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         pgbScan.setProgress(0);
         progress = 0;
 
-        int timeOut = sharedPreferences.getInt("socketTimeout", 2000);
-
         try {
             scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
             scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -177,6 +212,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_scan_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_scan_clear_output:
                 edtOutput.setText("");
@@ -210,6 +246,10 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
         edtOutput.append(getString(R.string.string_scan_complete));
         btnScan.setText(getString(R.string.string_scan));
+
+        if (vibrateOnComplete) {
+            vibrate();
+        }
     }
 
     @Override
@@ -224,19 +264,28 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     public void update(ScanProgress scanProgress) {
         progress++;
 
-        if (!edtOutput.getText().toString().isEmpty()) {
-            edtOutput.append("\n");
+        boolean display = true;
+
+        switch (scanProgress.getStatus()) {
+            case TIMEOUT:
+                if (!displayTimedOut) {
+                    display = false;
+                }
+                break;
+            case CLOSED:
+                if (!displayClosed) {
+                    display = false;
+                }
+                break;
         }
-        edtOutput.append(scanProgress.getFullHost() + " | " + scanProgress.getStatus());
+
+        if (display) {
+            if (!edtOutput.getText().toString().isEmpty()) {
+                edtOutput.append("\n");
+            }
+            edtOutput.append(scanProgress.getFullHost() + " | " + scanProgress.getStatus());
+        }
 
         pgbScan.setProgress(progress);
-    }
-
-    @Override
-    protected void onPause() {
-        if (scanController != null && !scanController.isCancelled()) {
-            scanController.cancel(true);
-        }
-        super.onPause();
     }
 }
