@@ -1,14 +1,16 @@
-package com.codedead.advancedportchecker.domain;
+package com.codedead.advancedportchecker.domain.controller;
 
 import android.os.AsyncTask;
 
-import com.codedead.advancedportchecker.interfaces.AsyncResponse;
+import com.codedead.advancedportchecker.domain.object.ScanProgress;
+import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
+import com.codedead.advancedportchecker.domain.object.ScanStatus;
 
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-public class ScanController extends AsyncTask<Void, ScanProgress, Void> {
+public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
     private String host;
     private int startPort;

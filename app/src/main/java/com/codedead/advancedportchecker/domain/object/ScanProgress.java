@@ -1,12 +1,12 @@
-package com.codedead.advancedportchecker.domain;
+package com.codedead.advancedportchecker.domain.object;
 
-public class ScanProgress {
+public final class ScanProgress {
 
-    private String host;
-    private int port;
+    private final String host;
+    private final int port;
     private ScanStatus status;
 
-    ScanProgress(String host, int port) {
+    public ScanProgress(String host, int port) {
         if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
 
         this.host = host;
@@ -28,8 +28,3 @@ public class ScanProgress {
     }
 }
 
-enum ScanStatus {
-    CLOSED,
-    OPEN,
-    TIMEOUT
-}

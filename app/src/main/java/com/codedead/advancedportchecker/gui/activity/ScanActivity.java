@@ -1,5 +1,6 @@
-package com.codedead.advancedportchecker.gui;
+package com.codedead.advancedportchecker.gui.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,9 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
-import com.codedead.advancedportchecker.domain.ScanController;
-import com.codedead.advancedportchecker.domain.ScanProgress;
-import com.codedead.advancedportchecker.interfaces.AsyncResponse;
+import com.codedead.advancedportchecker.domain.controller.ScanController;
+import com.codedead.advancedportchecker.domain.object.ScanProgress;
+import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
 
 public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
@@ -34,6 +35,8 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         edtHost = findViewById(R.id.EdtHost);
         edtStartPort = findViewById(R.id.EdtStartPort);
         edtEndPort = findViewById(R.id.EdtEndPort);
@@ -46,8 +49,6 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setControlModifiers(!edtHost.isEnabled());
-
                 if (scanController != null && !scanController.isCancelled()) {
                     stopScan();
                 } else if (scanController == null) {
@@ -67,23 +68,61 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         if (enabled) {
             pgbScan.setVisibility(View.GONE);
         } else {
-            int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString());
-            pgbScan.setMax(max);
             pgbScan.setVisibility(View.VISIBLE);
         }
     }
 
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
+
+        if (edtHost.getText().toString().length() == 0) {
+            Toast.makeText(this, "Please enter a valid host address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (edtStartPort.getText().toString().length() == 0) {
+            Toast.makeText(this, "Please enter a valid start port!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (edtEndPort.getText().toString().length() == 0) {
+            Toast.makeText(this, "Please enter a valid end port!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int startPort = Integer.parseInt(edtStartPort.getText().toString());
+        int endPort = Integer.parseInt(edtEndPort.getText().toString());
+
+        if (startPort < 1) {
+            Toast.makeText(this, "Start port is not a valid port number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (endPort < 1) {
+            Toast.makeText(this, "End port is not a valid port number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (endPort < startPort) {
+            Toast.makeText(this, "The end port cannot be smaller than the start port!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
+        pgbScan.setMax(max);
+        pgbScan.setProgress(0);
+
         edtOutput.setText("");
         progress = 0;
 
-        scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString())
-                , Integer.parseInt(edtEndPort.getText().toString()), 2000, this);
-
-        scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        btnScan.setText(getString(R.string.string_cancel_scan));
+        try {
+            scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 2000, this);
+            scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            btnScan.setText(getString(R.string.string_cancel_scan));
+            setControlModifiers(!edtHost.isEnabled());
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void stopScan() {
@@ -104,7 +143,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
             case R.id.nav_scan_settings:
                 break;
             case R.id.nav_scan_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case android.R.id.home:
             case R.id.nav_scan_exit:
                 finish();
                 break;

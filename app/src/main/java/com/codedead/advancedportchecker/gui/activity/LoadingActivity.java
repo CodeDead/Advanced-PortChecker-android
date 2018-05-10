@@ -1,4 +1,4 @@
-package com.codedead.advancedportchecker.gui;
+package com.codedead.advancedportchecker.gui.activity;
 
 import android.Manifest;
 import android.content.Context;
