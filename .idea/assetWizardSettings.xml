@@ -74,6 +74,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="3f51b5" />
                                       <entry key="foregroundAssetType" value="CLIP_ART" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
                                       <entry key="webIconShape" value="CIRCLE" />
@@ -82,11 +83,6 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
@@ -112,7 +108,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_email_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_network_wifi_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -123,7 +119,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="4fb7dd" />
-                            <entry key="outputName" value="ic_email_24dp" />
+                            <entry key="outputName" value="ic_network_wifi_24dp" />
                             <entry key="sourceFile" value="C:\Users\DeadLine" />
                           </map>
                         </option>

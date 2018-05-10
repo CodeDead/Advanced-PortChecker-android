@@ -42,5 +42,9 @@
     <string name="string_clear_output">Clear output</string>
     <string name="string_settings">Settings</string>
     <string name="string_exit">Exit</string>
+    <string name="string_display_notification_scan_finished">Display a notification when a scan finished</string>
+    <string name="string_notification_scan_complete">The port scan has completed!</string>
+    <string name="channel_description">Advanced PortChecker notifications</string>
+    <string name="title_activity_about">Advanced PortChecker - About</string>
 
 </resources>

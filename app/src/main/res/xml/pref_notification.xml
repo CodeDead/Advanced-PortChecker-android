@@ -2,6 +2,11 @@
 
     <SwitchPreference
         android:defaultValue="true"
+        android:key="notificationOnComplete"
+        android:title="@string/string_display_notification_scan_finished" />
+
+    <SwitchPreference
+        android:defaultValue="true"
         android:key="vibrateOnComplete"
         android:title="@string/string_vibrate_on_complete" />
 

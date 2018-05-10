@@ -1,5 +1,8 @@
 package com.codedead.advancedportchecker.gui.activity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +12,7 @@ import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,6 +48,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private boolean displayClosed;
     private int timeOut;
     private boolean vibrateOnComplete;
+    private boolean displayNotification;
+
+    private boolean active;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +82,19 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
                 }
             }
         });
+
+        createNotificationChannel();
+    }
+
+    @Override
+    protected void onPause() {
+        active = false;
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
+        active = true;
         if (sharedPreferences.getBoolean("keepScreenOn", true)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
@@ -89,6 +105,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         displayClosed = sharedPreferences.getBoolean("displayClosed", true);
         timeOut = Integer.parseInt(sharedPreferences.getString("socketTimeout", "200"));
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
+        displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
         super.onResume();
     }
 
@@ -102,6 +119,44 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }else{
             //deprecated in API 26
             v.vibrate(500);
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.app_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    private void displayNotification() {
+        Intent intent = new Intent(this, ScanActivity.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_network_wifi_24dp)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.string_notification_scan_complete))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.notify(1337, mBuilder.build());
         }
     }
 
@@ -247,8 +302,19 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         edtOutput.append(getString(R.string.string_scan_complete));
         btnScan.setText(getString(R.string.string_scan));
 
-        if (vibrateOnComplete) {
+        boolean vibrate = false;
+        if (vibrateOnComplete && displayNotification && !active) {
+            vibrate = false;
+        } else if (vibrateOnComplete && active) {
+            vibrate = true;
+        }
+
+        if (vibrate) {
             vibrate();
+        }
+
+        if (displayNotification && !active) {
+            displayNotification();
         }
     }
 
