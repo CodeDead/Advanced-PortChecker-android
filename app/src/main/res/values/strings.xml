@@ -18,14 +18,7 @@
     <string name="text_send_mail">Send us a mail!</string>
     <string name="title_activity_settings">Advanced PortChecker - Settings</string>
 
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
-    <!-- Example settings for Data & Sync -->
-
-    <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
     <string name="string_keep_screen_on">Keep screen on</string>
@@ -37,5 +30,17 @@
     <string name="string_socket_timeout_summary">The time it takes before a connection is marked as timed-out</string>
     <string name="string_reset_settings">Reset all settings</string>
     <string name="string_confirm_reset">Are you sure you want to reset all settings to their default values?</string>
+    <string name="string_give_manual_permissions">Would you like to manually give permissions?</string>
+    <string name="string_networkpermissions_required">Network permissions are required in order to run this app!</string>
+    <string name="string_enable_wifi">Would you like to enable wifi?</string>
+    <string name="string_no_internet">You don\'t have an active network connection!</string>
+    <string name="string_invalid_host">Please enter a valid host address!</string>
+    <string name="string_invalid_startport">Please enter a valid start port!</string>
+    <string name="string_invalid_endport">Please enter a valid end port!</string>
+    <string name="string_endport_larger_than_startport">The end port cannot be smaller than the start port!</string>
+    <string name="string_largest_possible_port">The largest possible port is 65535!</string>
+    <string name="string_clear_output">Clear output</string>
+    <string name="string_settings">Settings</string>
+    <string name="string_exit">Exit</string>
 
 </resources>

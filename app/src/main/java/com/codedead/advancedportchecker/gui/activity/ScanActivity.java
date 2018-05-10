@@ -138,17 +138,17 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         if (scanController != null && !scanController.isCancelled()) return;
 
         if (edtHost.getText().toString().length() == 0) {
-            showAlert("Please enter a valid host address!");
+            showAlert(getString(R.string.string_invalid_host));
             return;
         }
 
         if (edtStartPort.getText().toString().length() == 0) {
-            showAlert("Please enter a valid start port!");
+            showAlert(getString(R.string.string_invalid_startport));
             return;
         }
 
         if (edtEndPort.getText().toString().length() == 0) {
-            showAlert("Please enter a valid end port!");
+            showAlert(getString(R.string.string_invalid_endport));
             return;
         }
 
@@ -156,22 +156,22 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         int endPort = Integer.parseInt(edtEndPort.getText().toString());
 
         if (startPort < 1) {
-            showAlert("Start port is not a valid port number!");
+            showAlert(getString(R.string.string_invalid_startport));
             return;
         }
 
         if (endPort < 1) {
-            showAlert("End port is not a valid port number!");
+            showAlert(getString(R.string.string_invalid_endport));
             return;
         }
 
         if (endPort < startPort) {
-            showAlert("The end port cannot be smaller than the start port!");
+            showAlert(getString(R.string.string_endport_larger_than_startport));
             return;
         }
 
         if (endPort > 65535 || startPort > 65535) {
-            showAlert("The largest possible port is 65535!");
+            showAlert(getString(R.string.string_largest_possible_port));
             return;
         }
 

@@ -44,14 +44,16 @@ public class LoadingActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
 
             // If some or all of the required permissions are not available, we need to request the user to grant them
             // Don't worry, this will only request permission to data that hasn't been given out yet
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE
                     , Manifest.permission.CHANGE_WIFI_STATE
                     , Manifest.permission.ACCESS_WIFI_STATE
-                    , Manifest.permission.INTERNET}, 1);
+                    , Manifest.permission.INTERNET
+                    , Manifest.permission.VIBRATE}, 1);
         } else {
             checkConnectivity();
         }
@@ -85,7 +87,7 @@ public class LoadingActivity extends AppCompatActivity {
             // The required permissions have not been granted and thus the app cannot function correctly
             // Close the app
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Would you like to manually give permissions?");
+            builder.setMessage(R.string.string_give_manual_permissions);
             builder.setCancelable(false);
 
             builder.setPositiveButton(android.R.string.yes,
@@ -103,7 +105,7 @@ public class LoadingActivity extends AppCompatActivity {
             builder.setNegativeButton(android.R.string.no,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            Toast.makeText(LoadingActivity.this, "Network permissions are required in order to run this app!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoadingActivity.this, R.string.string_networkpermissions_required, Toast.LENGTH_SHORT).show();
                             finish();
                             dialog.cancel();
                         }
@@ -177,7 +179,7 @@ public class LoadingActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
-        builder.setMessage("Would you like to enable wifi?")
+        builder.setMessage(R.string.string_enable_wifi)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.yes, dialogClickListener)
                 .setNegativeButton(android.R.string.no, dialogClickListener)
@@ -200,7 +202,7 @@ public class LoadingActivity extends AppCompatActivity {
                     continueLoading();
                 } else {
                     // Close app because no internet connection is available
-                    Toast.makeText(LoadingActivity.this, "You don't have an active network connection!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoadingActivity.this, R.string.string_no_internet, Toast.LENGTH_LONG).show();
                     finish();
                 }
             }

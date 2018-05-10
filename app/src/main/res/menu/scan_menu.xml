@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/nav_scan_clear_output"
-        android:title="Clear output">
+        android:title="@string/string_clear_output">
 
     </item>
 
@@ -13,19 +13,19 @@
         android:id="@+id/nav_scan_settings"
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="ifRoom"
-        android:title="Settings">
+        android:title="@string/string_settings">
 
     </item>
 
     <item
         android:id="@+id/nav_scan_about"
-        android:title="About">
+        android:title="@string/string_about">
 
     </item>
 
     <item
         android:id="@+id/nav_scan_exit"
-        android:title="Exit">
+        android:title="@string/string_exit">
 
     </item>
 </menu>
