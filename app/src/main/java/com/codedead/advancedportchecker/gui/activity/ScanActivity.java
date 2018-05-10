@@ -1,7 +1,11 @@
 package com.codedead.advancedportchecker.gui.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,10 +34,14 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private ScanController scanController;
     private int progress;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+
+        sharedPreferences = getApplicationContext().getSharedPreferences(getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
 
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -54,7 +62,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
                 } else if (scanController == null) {
                     startScan();
                 } else {
-                    Toast.makeText(ScanActivity.this, R.string.string_wait_scancontroller, Toast.LENGTH_SHORT).show();
+                    showAlert(getString(R.string.string_wait_scancontroller));
                 }
             }
         });
@@ -72,21 +80,38 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
+    private void showAlert(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(
+                android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
 
         if (edtHost.getText().toString().length() == 0) {
-            Toast.makeText(this, "Please enter a valid host address!", Toast.LENGTH_SHORT).show();
+            showAlert("Please enter a valid host address!");
             return;
         }
 
         if (edtStartPort.getText().toString().length() == 0) {
-            Toast.makeText(this, "Please enter a valid start port!", Toast.LENGTH_SHORT).show();
+            showAlert("Please enter a valid start port!");
             return;
         }
 
         if (edtEndPort.getText().toString().length() == 0) {
-            Toast.makeText(this, "Please enter a valid end port!", Toast.LENGTH_SHORT).show();
+            showAlert("Please enter a valid end port!");
             return;
         }
 
@@ -94,30 +119,37 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         int endPort = Integer.parseInt(edtEndPort.getText().toString());
 
         if (startPort < 1) {
-            Toast.makeText(this, "Start port is not a valid port number!", Toast.LENGTH_SHORT).show();
+            showAlert("Start port is not a valid port number!");
             return;
         }
 
         if (endPort < 1) {
-            Toast.makeText(this, "End port is not a valid port number!", Toast.LENGTH_SHORT).show();
+            showAlert("End port is not a valid port number!");
             return;
         }
 
         if (endPort < startPort) {
-            Toast.makeText(this, "The end port cannot be smaller than the start port!", Toast.LENGTH_SHORT).show();
+            showAlert("The end port cannot be smaller than the start port!");
+            return;
+        }
+
+        if (endPort > 65535 || startPort > 65535) {
+            showAlert("The largest possible port is 65535!");
             return;
         }
 
         int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
         pgbScan.setMax(max);
         pgbScan.setProgress(0);
-
-        edtOutput.setText("");
         progress = 0;
 
+        int timeOut = sharedPreferences.getInt("socketTimeout", 500);
+
         try {
-            scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), 2000, this);
+            scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
             scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+            edtOutput.setText("");
             btnScan.setText(getString(R.string.string_cancel_scan));
             setControlModifiers(!edtHost.isEnabled());
         } catch (Exception ex) {

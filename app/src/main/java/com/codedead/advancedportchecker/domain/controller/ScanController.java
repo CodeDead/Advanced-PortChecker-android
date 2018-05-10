@@ -23,8 +23,10 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
                           int endPort, int timeOut,
                           AsyncResponse response) {
 
-        if (host == null || host.isEmpty()) throw new NullPointerException("Host cannot be null or empty!");
-        if (response == null) throw new NullPointerException("AsyncResponse delegate cannot be null!");
+        if (host == null || host.isEmpty())
+            throw new NullPointerException("Host cannot be null or empty!");
+        if (response == null)
+            throw new NullPointerException("AsyncResponse delegate cannot be null!");
 
         this.host = host;
         this.startPort = startPort;

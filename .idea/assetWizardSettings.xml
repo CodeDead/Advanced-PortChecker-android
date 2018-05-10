@@ -16,13 +16,27 @@
                             <entry key="actionbar">
                               <value>
                                 <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_email_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="C:\Users\DeadLine\Desktop\Logo.png" />
-                                      <entry key="outputName" value="ic_codedead_logo" />
+                                      <entry key="outputName" value="ic_email" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="000000" />
+                                      <entry key="themeColor" value="4fb7dd" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -70,6 +84,11 @@
                             </entry>
                           </map>
                         </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
+                          </map>
+                        </option>
                       </PersistentState>
                     </value>
                   </entry>
@@ -93,7 +112,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_help_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_email_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -103,7 +122,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_help_black_24dp" />
+                            <entry key="color" value="4fb7dd" />
+                            <entry key="outputName" value="ic_email_24dp" />
                             <entry key="sourceFile" value="C:\Users\DeadLine" />
                           </map>
                         </option>
