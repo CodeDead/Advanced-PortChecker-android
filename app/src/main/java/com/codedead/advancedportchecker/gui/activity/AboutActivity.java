@@ -21,7 +21,7 @@ public class AboutActivity extends AppCompatActivity {
 
     private static final String fragmentKey = "selectedFragment";
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
