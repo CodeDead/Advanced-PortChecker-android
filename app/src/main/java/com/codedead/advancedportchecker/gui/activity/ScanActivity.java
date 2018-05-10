@@ -138,12 +138,16 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
             return;
         }
 
+        edtHost.setText(edtHost.getText().toString().replace("http://",""));
+        edtHost.setText(edtHost.getText().toString().replace("https://",""));
+        edtHost.setText(edtHost.getText().toString().replace("ftp://",""));
+
         int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
         pgbScan.setMax(max);
         pgbScan.setProgress(0);
         progress = 0;
 
-        int timeOut = sharedPreferences.getInt("socketTimeout", 500);
+        int timeOut = sharedPreferences.getInt("socketTimeout", 2000);
 
         try {
             scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
@@ -173,6 +177,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_scan_settings:
+                break;
+            case R.id.nav_scan_clear_output:
+                edtOutput.setText("");
                 break;
             case R.id.nav_scan_about:
                 startActivity(new Intent(this, AboutActivity.class));

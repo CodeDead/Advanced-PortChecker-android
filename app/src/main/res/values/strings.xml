@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Advanced PortChecker</string>
-    <string name="string_logo">Logo</string>
-    <string name="string_localhost">127.0.0.1</string>
-    <string name="string_hint_one">1</string>
+    <string name="app_name" translatable="false">Advanced PortChecker</string>
+    <string name="string_logo" translatable="false">Logo</string>
+    <string name="string_localhost" translatable="false">127.0.0.1</string>
+    <string name="string_hint_one" translatable="false">1</string>
     <string name="string_port_from">From:</string>
     <string name="string_port_to">To:</string>
     <string name="string_scan">Scan</string>
@@ -13,7 +13,7 @@
 
     <string name="string_about">About</string>
     <string name="string_help">Help</string>
-    <string name="preferences_file_key">apsettings</string>
+    <string name="preferences_file_key" translatable="false">apsettings</string>
     <string name="text_about">Advanced PortChecker was created by DeadLine.\n\nThis application can be used to scan a host for open TCP ports. Please make sure that you have the appropriate permissions before scanning a host!\n\nImages by: Google\n\nCopyright © CodeDead 2018</string>
     <string name="btn_website">Website</string>
     <string name="btn_support">Support</string>

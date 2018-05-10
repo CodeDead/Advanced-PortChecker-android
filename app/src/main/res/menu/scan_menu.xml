@@ -4,6 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/nav_scan_clear_output"
+        android:title="Clear output">
+
+    </item>
+
+    <item
         android:id="@+id/nav_scan_settings"
         android:icon="@drawable/ic_settings_black_24dp"
         app:showAsAction="ifRoom"
@@ -11,12 +17,14 @@
 
     </item>
 
-    <item android:id="@+id/nav_scan_about"
+    <item
+        android:id="@+id/nav_scan_about"
         android:title="About">
 
     </item>
 
-    <item android:id="@+id/nav_scan_exit"
+    <item
+        android:id="@+id/nav_scan_exit"
         android:title="Exit">
 
     </item>
