@@ -21,7 +21,7 @@
     <string name="string_display_closed">Toon gesloten poorten</string>
     <string name="string_socket_timeout">Socket time-out</string>
     <string name="string_vibrate_on_complete">Trillen wanneer een scan werd voltooid</string>
-    <string name="string_socket_timeout_summary">De tijd voordat een port gemarkeerd wordt als timed-out</string>
+    <string name="string_socket_timeout_summary">De tijd voordat een poort gemarkeerd wordt als timed-out</string>
     <string name="string_reset_settings">Reset alle instellingen</string>
     <string name="string_confirm_reset">Ben u zeker dat u alle instellingen naar hun standaard waarde wenst te herstellen?</string>
     <string name="string_give_manual_permissions">Wenst u manueel toestemmingen te geven?</string>
@@ -29,8 +29,8 @@
     <string name="string_enable_wifi">Wenst u wifi aan te zetten?</string>
     <string name="string_no_internet">U heeft geen active internetconnectie</string>
     <string name="string_invalid_host">Gelieve een geldig host adres in te vullen!</string>
-    <string name="string_invalid_startport">Gelieve een geldig poortnummer in te vullen!</string>
-    <string name="string_invalid_endport">Gelieve een geldige eind poort in te vullen!</string>
+    <string name="string_invalid_startport">Gelieve een geldige startpoort in te vullen!</string>
+    <string name="string_invalid_endport">Gelieve een geldige eindpoort in te vullen!</string>
     <string name="string_endport_larger_than_startport">De eindpoort kan niet kleiner zijn dan de startpoort!</string>
     <string name="string_largest_possible_port">De grootste mogelijke poort is 65535!</string>
     <string name="string_clear_output">Verwijder output</string>
