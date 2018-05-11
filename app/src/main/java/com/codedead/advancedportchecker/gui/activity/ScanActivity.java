@@ -420,17 +420,23 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         progress++;
 
         boolean display = true;
+        String scanStatus = "";
 
         switch (scanProgress.getStatus()) {
             case TIMEOUT:
+                scanStatus = getString(R.string.string_timeout);
                 if (!displayTimedOut) {
                     display = false;
                 }
                 break;
             case CLOSED:
+                scanStatus = getString(R.string.string_closed);
                 if (!displayClosed) {
                     display = false;
                 }
+                break;
+            case OPEN:
+                scanStatus = getString(R.string.string_open);
                 break;
         }
 
@@ -438,7 +444,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
             if (!edtOutput.getText().toString().isEmpty()) {
                 edtOutput.append("\n");
             }
-            edtOutput.append(scanProgress.getFullHost() + " | " + scanProgress.getStatus());
+            edtOutput.append(scanProgress.getFullHost() + " | " + scanStatus);
         }
 
         pgbScan.setProgress(progress);

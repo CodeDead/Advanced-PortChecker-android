@@ -22,7 +22,7 @@
     <string name="pref_header_notifications">Notifications</string>
 
     <string name="string_keep_screen_on">Keep screen on</string>
-    <string name="string_screenOn_hint">Recommended for large port scans</string>
+    <string name="string_screenOn_hint">Recommended for large scans</string>
     <string name="string_display_timeouts">Display ports that have timed-out</string>
     <string name="string_display_closed">Display ports that are closed</string>
     <string name="string_socket_timeout">Socket time-out</string>
@@ -50,17 +50,24 @@
     <string name="alert_review_never">Never</string>
     <string name="string_application_languages">Language</string>
     <string name="string_applanguage_summary">The display language for the app</string>
+    <string name="string_timeout">TIMEOUT</string>
+    <string name="string_closed">CLOSED</string>
+    <string name="string_open">OPEN</string>
 
     <string-array name="array_languages" translatable="false">
         <item>English</item>
         <item>Nederlands</item>
         <item>Français</item>
+        <item>Deutsch</item>
+        <item>Español</item>
     </string-array>
 
     <string-array name="array_languages_values" translatable="false">
         <item>en</item>
         <item>nl</item>
         <item>fr</item>
+        <item>de</item>
+        <item>es</item>
     </string-array>
 
 </resources>

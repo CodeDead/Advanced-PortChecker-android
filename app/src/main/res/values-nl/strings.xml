@@ -4,7 +4,7 @@
     <string name="string_port_to">Tot:</string>
     <string name="string_scan">Scan</string>
     <string name="string_wait_scancontroller">Gelieve te wachten tot de scan afgesloten is!</string>
-    <string name="string_scan_cancelled">Scan geannuleerd</string>
+    <string name="string_scan_cancelled">Scan geannuleerd!</string>
     <string name="string_scan_complete">Scan voltooid!</string>
     <string name="string_cancel_scan">Annuleer</string>
     <string name="string_about">Over</string>
@@ -16,7 +16,7 @@
     <string name="pref_header_general">Algemeen</string>
     <string name="pref_header_notifications">Notificaties</string>
     <string name="string_keep_screen_on">Scherm aan houden</string>
-    <string name="string_screenOn_hint">Aanbevolen voor grote poort scans</string>
+    <string name="string_screenOn_hint">Aanbevolen voor grote scans</string>
     <string name="string_display_timeouts">Toon time-out poorten</string>
     <string name="string_display_closed">Toon gesloten poorten</string>
     <string name="string_socket_timeout">Socket time-out</string>
@@ -44,4 +44,7 @@
     <string name="alert_review_never">Nooit</string>
     <string name="string_application_languages">Taal</string>
     <string name="string_applanguage_summary">De taal die gebruikt wordt in de app</string>
+    <string name="string_timeout">TIMEOUT</string>
+    <string name="string_closed">GESLOTEN</string>
+    <string name="string_open">OPEN</string>
 </resources>

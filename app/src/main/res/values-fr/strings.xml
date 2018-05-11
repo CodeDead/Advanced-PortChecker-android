@@ -44,4 +44,7 @@
     <string name="alert_review_never">Jamais</string>
     <string name="string_application_languages">Langage</string>
     <string name="string_applanguage_summary">La langue d\'affichage de l\'application</string>
+    <string name="string_timeout">TIMEOUT</string>
+    <string name="string_closed">FERMÉ</string>
+    <string name="string_open">OUVERT</string>
 </resources>
