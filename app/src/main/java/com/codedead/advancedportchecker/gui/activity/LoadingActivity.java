@@ -4,12 +4,15 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +24,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
+import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -29,6 +35,10 @@ public class LoadingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
+
+        resetTitle();
         super.onCreate(savedInstanceState);
 
         View decorView = getWindow().getDecorView();
@@ -38,6 +48,28 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         checkPermissions();
+    }
+
+    private void resetTitle() {
+        try {
+            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            if (label != 0) {
+                setTitle(label);
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {
+
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleHelper.onAttach(getBaseContext());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     private void checkPermissions() {

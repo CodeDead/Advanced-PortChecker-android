@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="string_port_from">Van:</string>
+    <string name="string_port_to">Tot:</string>
+    <string name="string_scan">Scan</string>
+    <string name="string_wait_scancontroller">Gelieve te wachten tot de scan afgesloten is!</string>
+    <string name="string_scan_cancelled">Scan geannuleerd</string>
+    <string name="string_scan_complete">Scan voltooid!</string>
+    <string name="string_cancel_scan">Annuleer</string>
+    <string name="string_about">Over</string>
+    <string name="string_help">Help</string>
+    <string name="text_about">Advanced PortChecker werd gemaakt door DeadLine.\n\nDeze applicatie kan gebruikt worden om een host te scannen voor open TCP poorten. Gelieve toestemming te vragen aan de host voordat u een scan start.\n\nAfbeeldingen door: Google\n\nCopyright © CodeDead 2018</string>
+    <string name="text_help">Advanced PortChecker is een applicatie die u kan gebruiken om een host te scannen op open/gesloten TCP poorten. Gelieve zeker te zijn dat u toestemming heeft om een host te scannen!\n\nEen TCP poort kan liggen tussen poort 1 tot en met 65535.\nThe time-out is de hoeveelheid tijd voordat een connectie afgesloten wordt. Indien uw internet traag of niet optimaal is, wordt het aangeraden om de time-out te verhogen om betere resultaten te verkrijgen.\n\nIndien u een fout vindt, mag u ons steeds een mail sturen!</string>
+    <string name="text_send_mail">Stuur ons een mail!</string>
+    <string name="title_activity_settings">Advanced PortChecker - Instellingen</string>
+    <string name="pref_header_general">Algemeen</string>
+    <string name="pref_header_notifications">Notificaties</string>
+    <string name="string_keep_screen_on">Scherm aan houden</string>
+    <string name="string_screenOn_hint">Aanbevolen voor grote poort scans</string>
+    <string name="string_display_timeouts">Toon time-out poorten</string>
+    <string name="string_display_closed">Toon gesloten poorten</string>
+    <string name="string_socket_timeout">Socket time-out</string>
+    <string name="string_vibrate_on_complete">Trillen wanneer een scan werd voltooid</string>
+    <string name="string_socket_timeout_summary">De tijd voordat een port gemarkeerd wordt als timed-out</string>
+    <string name="string_reset_settings">Reset alle instellingen</string>
+    <string name="string_confirm_reset">Ben u zeker dat u alle instellingen naar hun standaard waarde wenst te herstellen?</string>
+    <string name="string_give_manual_permissions">Wenst u manueel toestemmingen te geven?</string>
+    <string name="string_networkpermissions_required">Netwerk permissies zijn nodig om deze app uit te voeren!</string>
+    <string name="string_enable_wifi">Wenst u wifi aan te zetten?</string>
+    <string name="string_no_internet">U heeft geen active internetconnectie</string>
+    <string name="string_invalid_host">Gelieve een geldig host adres in te vullen!</string>
+    <string name="string_invalid_startport">Gelieve een geldig poortnummer in te vullen!</string>
+    <string name="string_invalid_endport">Gelieve een geldige eind poort in te vullen!</string>
+    <string name="string_endport_larger_than_startport">De eindpoort kan niet kleiner zijn dan de startpoort!</string>
+    <string name="string_largest_possible_port">De grootste mogelijke poort is 65535!</string>
+    <string name="string_clear_output">Verwijder output</string>
+    <string name="string_settings">Instellingen</string>
+    <string name="string_exit">Sluiten</string>
+    <string name="string_display_notification_scan_finished">Toon een notificatie als een scan voltooid is</string>
+    <string name="string_notification_scan_complete">De scan is voltooid!</string>
+    <string name="channel_description">Advanced PortChecker notificaties</string>
+    <string name="title_activity_about">Advanced PortChecker - Over</string>
+    <string name="alert_review_text">Overweeg om een beoordeling achter te laten als je deze app leuk vindt!</string>
+    <string name="alert_review_never">Nooit</string>
+    <string name="string_application_languages">Applicatie taal</string>
+    <string name="string_applanguage_summary">De taal die gebruikt wordt in de app</string>
+</resources>

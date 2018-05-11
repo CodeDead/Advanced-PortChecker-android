@@ -26,4 +26,14 @@
         android:title="@string/string_socket_timeout"
         android:summary="@string/string_socket_timeout_summary"/>
 
+    <ListPreference
+        android:defaultValue="en"
+        android:entries="@array/array_languages"
+        android:entryValues="@array/array_languages_values"
+        android:key="appLanguage"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/string_application_languages"
+        android:summary="@string/string_applanguage_summary"/>
+
 </PreferenceScreen>

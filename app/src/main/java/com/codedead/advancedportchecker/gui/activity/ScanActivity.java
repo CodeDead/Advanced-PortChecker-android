@@ -7,8 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -27,9 +30,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
+import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 import com.codedead.advancedportchecker.domain.controller.ScanController;
+import com.codedead.advancedportchecker.domain.controller.UtilController;
 import com.codedead.advancedportchecker.domain.object.ScanProgress;
 import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
+
+import java.util.Random;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
@@ -52,12 +61,17 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
     private boolean active;
 
+    private String lastLanguage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        lastLanguage = sharedPreferences.getString("appLanguage", "en");
+        LocaleHelper.setLocale(this, lastLanguage);
+
+        resetTitle();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -78,12 +92,35 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
                 } else if (scanController == null) {
                     startScan();
                 } else {
-                    showAlert(getString(R.string.string_wait_scancontroller));
+                    UtilController.showAlert(getApplicationContext(), getString(R.string.string_wait_scancontroller));
                 }
             }
         });
 
         createNotificationChannel();
+        content_alerts();
+    }
+
+    private void resetTitle() {
+        try {
+            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            if (label != 0) {
+                setTitle(label);
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {
+
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleHelper.onAttach(getBaseContext());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
@@ -94,6 +131,11 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
     @Override
     protected void onResume() {
+        if (!lastLanguage.equals(sharedPreferences.getString("appLanguage", "en"))) {
+            LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("language", "en"));
+            recreate();
+        }
+
         active = true;
         if (sharedPreferences.getBoolean("keepScreenOn", true)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -107,6 +149,70 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
         displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
         super.onResume();
+    }
+
+    private void content_alerts() {
+        if (sharedPreferences.getInt("reviewTimes", 0) > 2) return;
+        Random rnd = new Random();
+
+        new CountDownTimer(rnd.nextInt(60) * 1000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                builder.setTitle(R.string.app_name);
+                builder.setMessage(R.string.alert_review_text);
+                builder.setCancelable(false);
+
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+
+                        addReview(true);
+                        UtilController.openWebsite(getApplicationContext(), "market://details?id=com.codedead.advancedportchecker");
+                    }
+                });
+
+                builder.setNeutralButton(R.string.alert_review_never, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        addReview(true);
+                    }
+                });
+
+                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        addReview(false);
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                if (!isFinishing() && active) {
+                    alert.show();
+                } else {
+                    cancel();
+                    start();
+                }
+            }
+        }.start();
+    }
+
+    private void addReview(boolean done) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (done) {
+            editor.putInt("reviewTimes", 3);
+        } else {
+            editor.putInt("reviewTimes", sharedPreferences.getInt("reviewTimes", 0) + 1);
+        }
+
+        editor.apply();
     }
 
     private void vibrate() {
@@ -172,38 +278,21 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
-    private void showAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message);
-        builder.setCancelable(true);
-
-        builder.setPositiveButton(
-                android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
 
         if (edtHost.getText().toString().length() == 0) {
-            showAlert(getString(R.string.string_invalid_host));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_host));
             return;
         }
 
         if (edtStartPort.getText().toString().length() == 0) {
-            showAlert(getString(R.string.string_invalid_startport));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_startport));
             return;
         }
 
         if (edtEndPort.getText().toString().length() == 0) {
-            showAlert(getString(R.string.string_invalid_endport));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_endport));
             return;
         }
 
@@ -211,22 +300,22 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         int endPort = Integer.parseInt(edtEndPort.getText().toString());
 
         if (startPort < 1) {
-            showAlert(getString(R.string.string_invalid_startport));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_startport));
             return;
         }
 
         if (endPort < 1) {
-            showAlert(getString(R.string.string_invalid_endport));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_endport));
             return;
         }
 
         if (endPort < startPort) {
-            showAlert(getString(R.string.string_endport_larger_than_startport));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_endport_larger_than_startport));
             return;
         }
 
         if (endPort > 65535 || startPort > 65535) {
-            showAlert(getString(R.string.string_largest_possible_port));
+            UtilController.showAlert(getApplicationContext(), getString(R.string.string_largest_possible_port));
             return;
         }
 

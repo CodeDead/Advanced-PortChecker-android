@@ -46,5 +46,21 @@
     <string name="string_notification_scan_complete">The port scan has completed!</string>
     <string name="channel_description">Advanced PortChecker notifications</string>
     <string name="title_activity_about">Advanced PortChecker - About</string>
+    <string name="alert_review_text">Please consider leaving a review if you like this app!</string>
+    <string name="alert_review_never">Never</string>
+    <string name="string_application_languages">Application language</string>
+    <string name="string_applanguage_summary">The display language for the app</string>
+
+    <string-array name="array_languages" translatable="false">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Français</item>
+    </string-array>
+
+    <string-array name="array_languages_values" translatable="false">
+        <item>en</item>
+        <item>nl</item>
+        <item>fr</item>
+    </string-array>
 
 </resources>

@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".domain.object.Runner"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

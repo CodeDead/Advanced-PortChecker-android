@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
@@ -15,10 +18,15 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import com.codedead.advancedportchecker.R;
+import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 
 import java.util.List;
 
+import static android.content.pm.PackageManager.GET_META_DATA;
+
 public class SettingsActivity extends AppCompatPreferenceActivity {
+
+    private SharedPreferences sharedPreferences;
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -31,29 +39,62 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
+
+        resetTitle();
         super.onCreate(savedInstanceState);
         setupActionBar();
     }
 
+    private void resetTitle() {
+        try {
+            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            if (label != 0) {
+                setTitle(label);
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {
+
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleHelper.onAttach(getBaseContext());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
     @Override
     public void onHeaderClick(Header header, int position) {
+        super.onHeaderClick(header, position);
         if (header.id == R.id.header_reset_settings) {
             confirmReset();
         }
-        super.onHeaderClick(header, position);
+    }
+
+    private void changeLanguage() {
+        LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
+        recreate();
     }
 
     private void confirmReset() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.string_confirm_reset);
-        builder.setCancelable(true);
+        builder.setCancelable(false);
 
         builder.setPositiveButton(
                 android.R.string.yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        pref.edit().clear().apply();
+                        sharedPreferences.edit().clear().apply();
+                        changeLanguage();
+                        recreate();
                         dialog.cancel();
                     }
                 });
@@ -66,8 +107,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     }
                 });
 
-        AlertDialog alert = builder.create();
-        alert.show();
+        builder.show();
     }
 
     /**
@@ -79,6 +119,45 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+            String stringValue = value.toString();
+
+            if (preference instanceof ListPreference) {
+                // For list preferences, look up the correct display value in
+                // the preference's 'entries' list.
+                ListPreference listPreference = (ListPreference) preference;
+                int index = listPreference.findIndexOfValue(stringValue);
+
+                // Set the summary to reflect the new value.
+                preference.setSummary(
+                        index >= 0
+                                ? listPreference.getEntries()[index]
+                                : null);
+
+            } else {
+                // For all other preferences, set the summary to the value's
+                // simple string representation.
+                preference.setSummary(stringValue);
+            }
+
+            return true;
+        }
+    };
+
+    private static void bindPreferenceSummaryToValue(Preference preference) {
+        // Set the listener to watch for value changes.
+        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+        // Trigger the listener immediately with the preference's
+        // current value.
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                PreferenceManager
+                        .getDefaultSharedPreferences(preference.getContext())
+                        .getString(preference.getKey(), ""));
     }
 
     /**
@@ -108,6 +187,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 || NotificationPreferenceFragment.class.getName().equals(fragmentName);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("appLanguage")) {
+            changeLanguage();
+        }
+    }
+
     /**
      * This fragment shows general preferences only. It is used when the
      * activity is showing a two-pane settings UI.
@@ -119,6 +205,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
+
+            bindPreferenceSummaryToValue(findPreference("appLanguage"));
         }
 
         @Override
