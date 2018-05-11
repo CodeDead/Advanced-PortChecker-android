@@ -92,13 +92,13 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
                 } else if (scanController == null) {
                     startScan();
                 } else {
-                    UtilController.showAlert(getApplicationContext(), getString(R.string.string_wait_scancontroller));
+                    UtilController.showAlert(ScanActivity.this, getString(R.string.string_wait_scancontroller));
                 }
             }
         });
 
         createNotificationChannel();
-        content_alerts();
+        reviewAlert();
     }
 
     private void resetTitle() {
@@ -151,11 +151,11 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         super.onResume();
     }
 
-    private void content_alerts() {
+    private void reviewAlert() {
         if (sharedPreferences.getInt("reviewTimes", 0) > 2) return;
         Random rnd = new Random();
 
-        new CountDownTimer(rnd.nextInt(60) * 1000, 1000) {
+        new CountDownTimer(rnd.nextInt(180) * 1000, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -282,17 +282,17 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         if (scanController != null && !scanController.isCancelled()) return;
 
         if (edtHost.getText().toString().length() == 0) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_host));
+            UtilController.showAlert(this, getString(R.string.string_invalid_host));
             return;
         }
 
         if (edtStartPort.getText().toString().length() == 0) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_startport));
+            UtilController.showAlert(this, getString(R.string.string_invalid_startport));
             return;
         }
 
         if (edtEndPort.getText().toString().length() == 0) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_endport));
+            UtilController.showAlert(this, getString(R.string.string_invalid_endport));
             return;
         }
 
@@ -300,22 +300,22 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         int endPort = Integer.parseInt(edtEndPort.getText().toString());
 
         if (startPort < 1) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_startport));
+            UtilController.showAlert(this, getString(R.string.string_invalid_startport));
             return;
         }
 
         if (endPort < 1) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_invalid_endport));
+            UtilController.showAlert(this, getString(R.string.string_invalid_endport));
             return;
         }
 
         if (endPort < startPort) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_endport_larger_than_startport));
+            UtilController.showAlert(this, getString(R.string.string_endport_larger_than_startport));
             return;
         }
 
         if (endPort > 65535 || startPort > 65535) {
-            UtilController.showAlert(getApplicationContext(), getString(R.string.string_largest_possible_port));
+            UtilController.showAlert(this, getString(R.string.string_largest_possible_port));
             return;
         }
 

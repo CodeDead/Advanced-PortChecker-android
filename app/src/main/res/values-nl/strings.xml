@@ -42,6 +42,6 @@
     <string name="title_activity_about">Advanced PortChecker - Over</string>
     <string name="alert_review_text">Overweeg om een beoordeling achter te laten als je deze app leuk vindt!</string>
     <string name="alert_review_never">Nooit</string>
-    <string name="string_application_languages">Applicatie taal</string>
+    <string name="string_application_languages">Taal</string>
     <string name="string_applanguage_summary">De taal die gebruikt wordt in de app</string>
 </resources>

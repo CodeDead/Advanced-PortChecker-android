@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="string_port_from">De:</string>
+    <string name="string_port_to">Jusqu\'à:</string>
+    <string name="string_scan">Scan</string>
+    <string name="string_wait_scancontroller">Veuillez attendre que l\'analyse soit terminée!</string>
+    <string name="string_scan_cancelled">Scan annulé!</string>
+    <string name="string_scan_complete">Scan complet!</string>
+    <string name="string_cancel_scan">Annuler</string>
+    <string name="string_about">À propos</string>
+    <string name="string_help">Aide</string>
+    <string name="text_about">Advanced PortChecker a été créé par DeadLine.\n\nCette application peut être utilisée pour analyser un hôte pour les ports TCP ouverts. Assurez-vous de disposer des autorisations appropriées avant de scanner un hôte!\n\nImages par: Google\n\nCopyright © CodeDead 2018</string>
+    <string name="text_help">Advanced PortChecker est une application que vous pouvez utiliser pour analyser un hôte pour les ports TCP ouverts/fermés. Veuillez vous assurer que vous avez la permission de scanner un hôte avant de commencer l\'analyse!\n\nUn port TCP est compris entre 1 et 65535.\nLe délai d\'attente est le temps qu\'il faut avant qu\'une connexion active soit fermée. Si votre connexion Internet est lente et/ou ne répond pas, il est recommandé d\'augmenter le délai d\'attente car vos résultats risquent de ne pas être exacts.\n\nSi vous trouvez un bug, vous pouvez nous envoyer un email!</string>
+    <string name="text_send_mail">Envoyez-nous un mail!</string>
+    <string name="title_activity_settings">Advanced PortChecker - Paramètres</string>
+    <string name="pref_header_general">Général</string>
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="string_keep_screen_on">Gardez l\'écran allumé</string>
+    <string name="string_screenOn_hint">Recommandé pour les grands scans</string>
+    <string name="string_display_timeouts">Afficher les ports qui ont expiré</string>
+    <string name="string_display_closed">Afficher les ports qui sont fermés</string>
+    <string name="string_socket_timeout">Délai d\'attente de socket</string>
+    <string name="string_vibrate_on_complete">Vibrer lorsque l\'analyse est terminée</string>
+    <string name="string_socket_timeout_summary">Le temps qu\'il faut avant qu\'une connexion soit marquée comme étant expiré</string>
+    <string name="string_reset_settings">Réinitialiser tous les réglages</string>
+    <string name="string_confirm_reset">Êtes-vous sûr de vouloir réinitialiser tous les paramètres à leurs valeurs par défaut?</string>
+    <string name="string_give_manual_permissions">Voulez-vous donner manuellement des autorisations?</string>
+    <string name="string_networkpermissions_required">Les autorisations réseau sont nécessaires pour exécuter cette application!</string>
+    <string name="string_enable_wifi">Voulez-vous activer le wifi?</string>
+    <string name="string_no_internet">Vous n\'avez pas de connexion réseau active!</string>
+    <string name="string_invalid_host">Veuillez entrer une adresse d\'hôte valide!</string>
+    <string name="string_invalid_startport">Veuillez entrer un port de démarrage valide!</string>
+    <string name="string_invalid_endport">Veuillez entrer un port de fin valide!</string>
+    <string name="string_endport_larger_than_startport">Le port de fin ne peut pas être plus petit que le port de démarrage!</string>
+    <string name="string_largest_possible_port">Le plus grand port possible est 65535!</string>
+    <string name="string_clear_output">Effacer la sortie</string>
+    <string name="string_settings">Paramètres</string>
+    <string name="string_exit">Quitter</string>
+    <string name="string_display_notification_scan_finished">Afficher une notification lorsque l\'analyse est terminée</string>
+    <string name="string_notification_scan_complete">Le scan est terminé!</string>
+    <string name="channel_description">Advanced PortChecker notifications</string>
+    <string name="title_activity_about">Advanced PortChecker - À propos</string>
+    <string name="alert_review_text">S\'il vous plaît envisager de laisser un commentaire si vous aimez cette application!</string>
+    <string name="alert_review_never">Jamais</string>
+    <string name="string_application_languages">Langage</string>
+    <string name="string_applanguage_summary">La langue d\'affichage de l\'application</string>
+</resources>

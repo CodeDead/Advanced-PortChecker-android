@@ -43,12 +43,12 @@
     <string name="string_settings">Settings</string>
     <string name="string_exit">Exit</string>
     <string name="string_display_notification_scan_finished">Display a notification when a scan finished</string>
-    <string name="string_notification_scan_complete">The port scan has completed!</string>
+    <string name="string_notification_scan_complete">The scan has completed!</string>
     <string name="channel_description">Advanced PortChecker notifications</string>
     <string name="title_activity_about">Advanced PortChecker - About</string>
     <string name="alert_review_text">Please consider leaving a review if you like this app!</string>
     <string name="alert_review_never">Never</string>
-    <string name="string_application_languages">Application language</string>
+    <string name="string_application_languages">Language</string>
     <string name="string_applanguage_summary">The display language for the app</string>
 
     <string-array name="array_languages" translatable="false">
