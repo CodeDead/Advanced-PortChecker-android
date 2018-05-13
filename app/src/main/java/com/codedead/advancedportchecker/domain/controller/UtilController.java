@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Patterns;
 
 public final class UtilController {
 
@@ -34,5 +35,9 @@ public final class UtilController {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public static boolean isValidAddress(String address) {
+        return Patterns.WEB_URL.matcher(address).matches() || Patterns.IP_ADDRESS.matcher(address).matches();
     }
 }

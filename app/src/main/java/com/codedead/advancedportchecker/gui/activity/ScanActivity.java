@@ -281,7 +281,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
 
-        if (edtHost.getText().toString().length() == 0) {
+        if (edtHost.getText().toString().length() == 0 || !UtilController.isValidAddress(edtHost.getText().toString())) {
             UtilController.showAlert(this, getString(R.string.string_invalid_host));
             return;
         }
