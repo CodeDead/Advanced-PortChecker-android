@@ -4,7 +4,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -88,16 +87,13 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
         edtOutput.setKeyListener(null);
 
-        btnScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (scanController != null && !scanController.isCancelled()) {
-                    stopScan();
-                } else if (scanController == null) {
-                    startScan();
-                } else {
-                    UtilController.showAlert(ScanActivity.this, getString(R.string.string_wait_scancontroller));
-                }
+        btnScan.setOnClickListener(v -> {
+            if (scanController != null && !scanController.isCancelled()) {
+                stopScan();
+            } else if (scanController == null) {
+                startScan();
+            } else {
+                UtilController.showAlert(ScanActivity.this, getString(R.string.string_wait_scancontroller));
             }
         });
 
@@ -179,28 +175,21 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                 builder.setMessage(R.string.alert_review_text);
                 builder.setCancelable(false);
 
-                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                    dialog.cancel();
 
-                        addReview(true);
-                        UtilController.openWebsite(getApplicationContext(), "market://details?id=com.codedead.advancedportchecker");
-                    }
+                    addReview(true);
+                    UtilController.openWebsite(getApplicationContext(), "market://details?id=com.codedead.advancedportchecker");
                 });
 
-                builder.setNeutralButton(R.string.alert_review_never, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                        addReview(true);
-                    }
+                builder.setNeutralButton(R.string.alert_review_never, (dialog, id) -> {
+                    dialog.cancel();
+                    addReview(true);
                 });
 
-                builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        addReview(false);
-                    }
+                builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    dialog.cancel();
+                    addReview(false);
                 });
 
                 AlertDialog alert = builder.create();

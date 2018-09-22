@@ -1,7 +1,6 @@
 package com.codedead.advancedportchecker.domain.controller;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -36,11 +35,7 @@ public final class UtilController {
 
         builder.setPositiveButton(
                 android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, id) -> dialog.cancel());
 
         AlertDialog alert = builder.create();
         alert.show();

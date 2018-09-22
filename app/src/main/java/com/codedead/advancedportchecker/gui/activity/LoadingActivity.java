@@ -133,24 +133,20 @@ public final class LoadingActivity extends AppCompatActivity {
             builder.setCancelable(false);
 
             builder.setPositiveButton(android.R.string.yes,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", getPackageName(), null);
-                            intent.setData(uri);
-                            startActivityForResult(intent, ACTIVITY_SETTINGS_CODE);
-                        }
+                    (dialog, id) -> {
+                        dialog.cancel();
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, ACTIVITY_SETTINGS_CODE);
                     });
 
             builder.setNegativeButton(android.R.string.no,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Toast.makeText(LoadingActivity.this, R.string.string_networkpermissions_required, Toast.LENGTH_SHORT).show();
-                            finish();
-                            dialog.cancel();
-                        }
+                    (dialog, id) -> {
+                        Toast.makeText(LoadingActivity.this, R.string.string_networkpermissions_required, Toast.LENGTH_SHORT).show();
+                        finish();
+                        dialog.cancel();
                     });
 
             AlertDialog alert = builder.create();
@@ -214,22 +210,19 @@ public final class LoadingActivity extends AppCompatActivity {
      * Request the user to enable the Wifi of the device
      */
     private void wifiConfirmationCheck() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        // Turn on WiFi
-                        wifi.setWifiEnabled(true);
-                        // Check if WiFi is connected
-                        delayedWifiCheck();
-                        break;
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    // Turn on WiFi
+                    wifi.setWifiEnabled(true);
+                    // Check if WiFi is connected
+                    delayedWifiCheck();
+                    break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        // Close this app since an internet connection is required
-                        finish();
-                        break;
-                }
+                case DialogInterface.BUTTON_NEGATIVE:
+                    // Close this app since an internet connection is required
+                    finish();
+                    break;
             }
         };
 

@@ -2,7 +2,6 @@ package com.codedead.advancedportchecker.gui.activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -99,22 +98,16 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
 
         builder.setPositiveButton(
                 android.R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        sharedPreferences.edit().clear().apply();
-                        changeLanguage();
-                        recreate();
-                        dialog.cancel();
-                    }
+                (dialog, id) -> {
+                    sharedPreferences.edit().clear().apply();
+                    changeLanguage();
+                    recreate();
+                    dialog.cancel();
                 });
 
         builder.setNegativeButton(
                 android.R.string.no,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, id) -> dialog.cancel());
 
         builder.show();
     }
@@ -130,31 +123,28 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
-    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
+    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
+        String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
+        if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
 
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                    index >= 0
+                            ? listPreference.getEntries()[index]
+                            : null);
 
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
-
-            return true;
+        } else {
+            // For all other preferences, set the summary to the value's
+            // simple string representation.
+            preference.setSummary(stringValue);
         }
+
+        return true;
     };
 
     private static void bindPreferenceSummaryToValue(Preference preference) {
