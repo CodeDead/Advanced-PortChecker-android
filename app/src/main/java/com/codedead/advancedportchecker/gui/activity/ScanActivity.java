@@ -16,9 +16,13 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +31,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
@@ -40,7 +43,7 @@ import java.util.Random;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
-public class ScanActivity extends AppCompatActivity implements AsyncResponse {
+public final class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
     private EditText edtHost;
     private EditText edtStartPort;
@@ -55,6 +58,7 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
     private SharedPreferences sharedPreferences;
     private boolean displayTimedOut;
     private boolean displayClosed;
+    private boolean statusColorCoded;
     private int timeOut;
     private boolean vibrateOnComplete;
     private boolean displayNotification;
@@ -101,14 +105,17 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         reviewAlert();
     }
 
+    /**
+     * Reset the title of the activity
+     */
     private void resetTitle() {
         try {
             int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {
-
+        } catch (PackageManager.NameNotFoundException ex) {
+            UtilController.showAlert(this, ex.getMessage());
         }
     }
 
@@ -145,12 +152,16 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
 
         displayTimedOut = sharedPreferences.getBoolean("displayTimeOut", true);
         displayClosed = sharedPreferences.getBoolean("displayClosed", true);
+        statusColorCoded = sharedPreferences.getBoolean("statusColorCoded", true);
         timeOut = Integer.parseInt(sharedPreferences.getString("socketTimeout", "200"));
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
         displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
         super.onResume();
     }
 
+    /**
+     * Display an alert to the user, requesting to review the application
+     */
     private void reviewAlert() {
         if (sharedPreferences.getInt("reviewTimes", 0) > 2) return;
         Random rnd = new Random();
@@ -203,6 +214,10 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }.start();
     }
 
+    /**
+     * Keep track of the amount of times the user has been requested to review the application
+     * @param done True if the user has reviewed or does not want to review the application
+     */
     private void addReview(boolean done) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -215,6 +230,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         editor.apply();
     }
 
+    /**
+     * Vibrate the device for half a second
+     */
     private void vibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v == null) return;
@@ -228,6 +246,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
+    /**
+     * Create a notification channel to display notifications
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -246,6 +267,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
+    /**
+     * Display a notification in the device
+     */
     private void displayNotification() {
         Intent intent = new Intent(this, ScanActivity.class);
         intent.setAction(Intent.ACTION_MAIN);
@@ -266,6 +290,10 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
+    /**
+     * Set the availability of certain controls before or after a scan
+     * @param enabled True if all important controls should be enabled, otherwise false
+     */
     private void setControlModifiers(boolean enabled) {
         edtHost.setEnabled(enabled);
         edtStartPort.setEnabled(enabled);
@@ -278,13 +306,11 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         }
     }
 
+    /**
+     * Start a new scan
+     */
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
-
-        if (edtHost.getText().toString().length() == 0 || !UtilController.isValidAddress(edtHost.getText().toString())) {
-            UtilController.showAlert(this, getString(R.string.string_invalid_host));
-            return;
-        }
 
         if (edtStartPort.getText().toString().length() == 0) {
             UtilController.showAlert(this, getString(R.string.string_invalid_startport));
@@ -296,50 +322,26 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
             return;
         }
 
-        int startPort = Integer.parseInt(edtStartPort.getText().toString());
-        int endPort = Integer.parseInt(edtEndPort.getText().toString());
-
-        if (startPort < 1) {
-            UtilController.showAlert(this, getString(R.string.string_invalid_startport));
-            return;
-        }
-
-        if (endPort < 1) {
-            UtilController.showAlert(this, getString(R.string.string_invalid_endport));
-            return;
-        }
-
-        if (endPort < startPort) {
-            UtilController.showAlert(this, getString(R.string.string_endport_larger_than_startport));
-            return;
-        }
-
-        if (endPort > 65535 || startPort > 65535) {
-            UtilController.showAlert(this, getString(R.string.string_largest_possible_port));
-            return;
-        }
-
-        edtHost.setText(edtHost.getText().toString().replace("http://",""));
-        edtHost.setText(edtHost.getText().toString().replace("https://",""));
-        edtHost.setText(edtHost.getText().toString().replace("ftp://",""));
-
-        int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
-        pgbScan.setMax(max);
-        pgbScan.setProgress(0);
-        progress = 0;
-
         try {
-            scanController = new ScanController(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
+            int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
+            pgbScan.setMax(max);
+            pgbScan.setProgress(0);
+            progress = 0;
+
+            scanController = new ScanController(this.getApplicationContext(), edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
             scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             edtOutput.setText("");
             btnScan.setText(getString(R.string.string_cancel_scan));
             setControlModifiers(!edtHost.isEnabled());
         } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            UtilController.showAlert(this, ex.getMessage());
         }
     }
 
+    /**
+     * Cancel a scan
+     */
     private void stopScan() {
         if (scanController == null) return;
         scanController.cancel(true);
@@ -372,6 +374,9 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Add text to the output to indicate that a scan was cancelled
+     */
     private void addCancelText() {
         if (!edtOutput.getText().toString().isEmpty()) {
             edtOutput.append("\n");
@@ -420,31 +425,46 @@ public class ScanActivity extends AppCompatActivity implements AsyncResponse {
         progress++;
 
         boolean display = true;
-        String scanStatus = "";
+
+        String scanStatus;
+        ForegroundColorSpan colorSpan;
 
         switch (scanProgress.getStatus()) {
             case TIMEOUT:
                 scanStatus = getString(R.string.string_timeout);
+                colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_orange_dark));
+
                 if (!displayTimedOut) {
                     display = false;
                 }
                 break;
+            default:
             case CLOSED:
                 scanStatus = getString(R.string.string_closed);
+                colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+
                 if (!displayClosed) {
                     display = false;
                 }
                 break;
             case OPEN:
                 scanStatus = getString(R.string.string_open);
+                colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_green_dark));
                 break;
         }
 
         if (display) {
+            Spannable coloredText = new SpannableString(scanStatus);
             if (!edtOutput.getText().toString().isEmpty()) {
                 edtOutput.append("\n");
             }
-            edtOutput.append(scanProgress.getFullHost() + " | " + scanStatus);
+
+            if (statusColorCoded) {
+                coloredText.setSpan(colorSpan, 0, scanStatus.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            edtOutput.append(scanProgress.getFullHost() + " | ");
+            edtOutput.append(coloredText);
         }
 
         pgbScan.setProgress(progress);

@@ -25,10 +25,11 @@ import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
+import com.codedead.advancedportchecker.domain.controller.UtilController;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
-public class LoadingActivity extends AppCompatActivity {
+public final class LoadingActivity extends AppCompatActivity {
 
     private static final int ACTIVITY_SETTINGS_CODE = 1337;
     private WifiManager wifi;
@@ -50,14 +51,17 @@ public class LoadingActivity extends AppCompatActivity {
         checkPermissions();
     }
 
+    /**
+     * Reset the title of the activity
+     */
     private void resetTitle() {
         try {
             int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {
-
+        } catch (PackageManager.NameNotFoundException ex) {
+            UtilController.showAlert(this, ex.getMessage());
         }
     }
 
@@ -72,6 +76,9 @@ public class LoadingActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
+    /**
+     * Check whether all the required permissions are granted. If they are not granted, prompt the user to allow the permissions
+     */
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
@@ -91,6 +98,9 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Continue the loading animation and display the new activity when the loading animation has finished
+     */
     private void continueLoading() {
         final Intent i = new Intent(this, ScanActivity.class);
 
@@ -160,6 +170,10 @@ public class LoadingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Check whether an internet connection is available
+     * @return True if an internet connection is available, otherwise false
+     */
     private boolean hasInternet() {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = null;
@@ -169,6 +183,9 @@ public class LoadingActivity extends AppCompatActivity {
         return activeNetwork != null && (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE);
     }
 
+    /**
+     * Check if Wifi is enabled. If Wifi is not enabled, request the user to enable Wifi
+     */
     private void checkWifiState() {
         if (!wifi.isWifiEnabled()) {
             wifiConfirmationCheck();
@@ -177,6 +194,9 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Check whether an internet connection is available
+     */
     private void checkConnectivity() {
         // Initialize WifiManager
         wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -190,6 +210,9 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Request the user to enable the Wifi of the device
+     */
     private void wifiConfirmationCheck() {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -218,6 +241,9 @@ public class LoadingActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Check whether an internet connection is available after a certain amount of time has passed
+     */
     private void delayedWifiCheck() {
         new CountDownTimer(10000, 1000) {
             @Override

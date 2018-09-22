@@ -21,7 +21,7 @@
     <string name="string_display_closed">Mostrar puertos que están cerrados</string>
     <string name="string_socket_timeout">Tiempo de espera del zócalo</string>
     <string name="string_vibrate_on_complete">Vibrar cuando el escaneo se haya completado</string>
-    <string name="string_socket_timeout_summary">El tiempo que transcurre antes de que una conexión se marque como tiempo de espera agotado</string>
+    <string name="string_socket_timeout_summary">El tiempo que transcurre antes de que una conexión se marque como tiempo de espera agotado (ms)</string>
     <string name="string_reset_settings">Restablecer todos los ajustes</string>
     <string name="string_confirm_reset">¿Estás seguro de que deseas restablecer todas las configuraciones a sus valores predeterminados?</string>
     <string name="string_give_manual_permissions">¿Le gustaría dar permisos manualmente?</string>
@@ -47,4 +47,7 @@
     <string name="string_timeout">TIEMPO MUERTO</string>
     <string name="string_closed">CERRADO</string>
     <string name="string_open">ABIERTO</string>
+    <string name="asyncResponse_null_exception">¡El delegado AsyncResponse no puede ser nulo!</string>
+    <string name="scanStatus_colorCoded">Estado de escaneo codificado por colores</string>
+    <string name="scanStatus_colorCoded_summary">El estado de un puerto se codificará por color</string>
 </resources>

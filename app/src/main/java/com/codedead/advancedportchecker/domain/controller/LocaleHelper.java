@@ -70,5 +70,4 @@ public class LocaleHelper {
 
         return context;
     }
-
 }

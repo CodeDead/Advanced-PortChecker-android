@@ -21,7 +21,7 @@
     <string name="string_display_closed">Zeigt Ports an, die geschlossen sind</string>
     <string name="string_socket_timeout">Socket-Zeitüberschreitung</string>
     <string name="string_vibrate_on_complete">Vibrieren, wenn der Scan abgeschlossen ist</string>
-    <string name="string_socket_timeout_summary">Die Zeit bis zum Verbindungsaufbau wird als Zeitlimit markiert</string>
+    <string name="string_socket_timeout_summary">Die Zeit bis zum Verbindungsaufbau wird als Zeitlimit markiert (ms)</string>
     <string name="string_reset_settings">Alle Einstellungen zurücksetzen</string>
     <string name="string_confirm_reset">Möchten Sie wirklich alle Einstellungen auf ihre Standardwerte zurücksetzen?</string>
     <string name="string_give_manual_permissions">Möchten Sie manuell Berechtigungen erteilen?</string>
@@ -47,4 +47,7 @@
     <string name="string_timeout">AUSZEIT</string>
     <string name="string_closed">GESCHLOSSEN</string>
     <string name="string_open">OFFEN</string>
+    <string name="asyncResponse_null_exception">AsyncResponse-Delegat darf nicht null sein!</string>
+    <string name="scanStatus_colorCoded">Scan-Status farbcodiert</string>
+    <string name="scanStatus_colorCoded_summary">Der Status eines Ports wird farblich markiert</string>
 </resources>

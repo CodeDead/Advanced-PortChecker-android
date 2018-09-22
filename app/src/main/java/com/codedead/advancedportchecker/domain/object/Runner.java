@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 
-public class Runner extends Application {
+public final class Runner extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {

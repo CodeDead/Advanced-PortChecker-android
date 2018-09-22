@@ -21,7 +21,7 @@
     <string name="string_display_closed">Afficher les ports qui sont fermés</string>
     <string name="string_socket_timeout">Délai d\'attente de socket</string>
     <string name="string_vibrate_on_complete">Vibrer lorsque l\'analyse est terminée</string>
-    <string name="string_socket_timeout_summary">Le temps qu\'il faut avant qu\'une connexion soit marquée comme étant expiré</string>
+    <string name="string_socket_timeout_summary">Le temps qu\'il faut avant qu\'une connexion soit marquée comme étant expiré (ms)</string>
     <string name="string_reset_settings">Réinitialiser tous les réglages</string>
     <string name="string_confirm_reset">Êtes-vous sûr de vouloir réinitialiser tous les paramètres à leurs valeurs par défaut?</string>
     <string name="string_give_manual_permissions">Voulez-vous donner manuellement des autorisations?</string>
@@ -47,4 +47,7 @@
     <string name="string_timeout">TIMEOUT</string>
     <string name="string_closed">FERMÉ</string>
     <string name="string_open">OUVERT</string>
+    <string name="scanStatus_colorCoded">Couleur de statut</string>
+    <string name="asyncResponse_null_exception">Le délégué AsyncResponse ne peut pas être nul!</string>
+    <string name="scanStatus_colorCoded_summary">Le statut d\'un port sera codé par couleur</string>
 </resources>

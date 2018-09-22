@@ -12,8 +12,11 @@ import android.widget.ImageButton;
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.UtilController;
 
-public class InfoFragment extends Fragment implements View.OnClickListener {
+public final class InfoFragment extends Fragment implements View.OnClickListener {
 
+    /**
+     * Initialize a new InfoFragment
+     */
     public InfoFragment() {
         // Required empty public constructor
     }

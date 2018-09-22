@@ -11,6 +11,12 @@
         android:title="@string/string_display_closed" />
 
     <SwitchPreference
+        android:defaultValue="true"
+        android:key="statusColorCoded"
+        android:summary="@string/scanStatus_colorCoded_summary"
+        android:title="@string/scanStatus_colorCoded" />
+
+    <SwitchPreference
         android:defaultValue="false"
         android:key="keepScreenOn"
         android:summary="@string/string_screenOn_hint"

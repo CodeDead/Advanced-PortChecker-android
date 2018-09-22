@@ -21,7 +21,7 @@
     <string name="string_display_closed">Toon gesloten poorten</string>
     <string name="string_socket_timeout">Socket time-out</string>
     <string name="string_vibrate_on_complete">Trillen wanneer een scan werd voltooid</string>
-    <string name="string_socket_timeout_summary">De tijd voordat een poort gemarkeerd wordt als timed-out</string>
+    <string name="string_socket_timeout_summary">De tijd voordat een poort gemarkeerd wordt als timed-out (ms)</string>
     <string name="string_reset_settings">Reset alle instellingen</string>
     <string name="string_confirm_reset">Ben u zeker dat u alle instellingen naar hun standaard waarde wenst te herstellen?</string>
     <string name="string_give_manual_permissions">Wenst u manueel toestemmingen te geven?</string>
@@ -47,4 +47,7 @@
     <string name="string_timeout">TIMEOUT</string>
     <string name="string_closed">GESLOTEN</string>
     <string name="string_open">OPEN</string>
+    <string name="asyncResponse_null_exception">AsyncResponse delegate kan niet null zijn!</string>
+    <string name="scanStatus_colorCoded">Scanstatus kleur gecodeerd</string>
+    <string name="scanStatus_colorCoded_summary">"De status van een scan zal kleurgecodeerd "</string>
 </resources>

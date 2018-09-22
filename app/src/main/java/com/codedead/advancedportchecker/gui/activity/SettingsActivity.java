@@ -24,7 +24,7 @@ import java.util.List;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public final class SettingsActivity extends AppCompatPreferenceActivity {
 
     private SharedPreferences sharedPreferences;
 
@@ -48,6 +48,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
     }
 
+    /**
+     * Reset the title of the activity
+     */
     private void resetTitle() {
         try {
             int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
@@ -78,11 +81,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
     }
 
+    /**
+     * Change the language of the application
+     */
     private void changeLanguage() {
         LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
         recreate();
     }
 
+    /**
+     * Request the user to confirm a reset of all settings
+     */
     private void confirmReset() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.string_confirm_reset);

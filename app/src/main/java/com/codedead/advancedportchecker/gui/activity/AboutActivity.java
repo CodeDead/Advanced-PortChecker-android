@@ -15,12 +15,13 @@ import android.view.MenuItem;
 
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
+import com.codedead.advancedportchecker.domain.controller.UtilController;
 import com.codedead.advancedportchecker.gui.fragment.AboutFragment;
 import com.codedead.advancedportchecker.gui.fragment.InfoFragment;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
-public class AboutActivity extends AppCompatActivity {
+public final class AboutActivity extends AppCompatActivity {
 
     private Fragment aboutFragment;
     private Fragment infoFragment;
@@ -75,14 +76,17 @@ public class AboutActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    /**
+     * Reset the title of the activity
+     */
     private void resetTitle() {
         try {
             int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
-        } catch (PackageManager.NameNotFoundException ignored) {
-
+        } catch (PackageManager.NameNotFoundException ex) {
+            UtilController.showAlert(this, ex.getMessage());
         }
     }
 
@@ -112,6 +116,10 @@ public class AboutActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    /**
+     * Switch the active fragment
+     * @param selected The index of the fragment that should be displayed
+     */
     private void switchFragment(int selected) {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
@@ -130,5 +138,4 @@ public class AboutActivity extends AppCompatActivity {
         trans.replace(R.id.content, fragment);
         trans.commit();
     }
-
 }

@@ -27,7 +27,7 @@
     <string name="string_display_closed">Display ports that are closed</string>
     <string name="string_socket_timeout">Socket time-out</string>
     <string name="string_vibrate_on_complete">Vibrate when scan has completed</string>
-    <string name="string_socket_timeout_summary">The time it takes before a connection is marked as timed-out</string>
+    <string name="string_socket_timeout_summary">The time it takes before a connection is marked as timed-out (ms)</string>
     <string name="string_reset_settings">Reset all settings</string>
     <string name="string_confirm_reset">Are you sure you want to reset all settings to their default values?</string>
     <string name="string_give_manual_permissions">Would you like to manually give permissions?</string>
@@ -53,6 +53,9 @@
     <string name="string_timeout">TIMEOUT</string>
     <string name="string_closed">CLOSED</string>
     <string name="string_open">OPEN</string>
+    <string name="asyncResponse_null_exception">AsyncResponse delegate cannot be null!</string>
+    <string name="scanStatus_colorCoded">Scan status color coded</string>
+    <string name="scanStatus_colorCoded_summary">The status of a port will be color coded</string>
 
     <string-array name="array_languages" translatable="false">
         <item>English</item>
