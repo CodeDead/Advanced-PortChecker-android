@@ -33,6 +33,7 @@ public final class LoadingActivity extends AppCompatActivity {
 
     private static final int ACTIVITY_SETTINGS_CODE = 1337;
     private WifiManager wifi;
+    private static boolean hasStopped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,18 @@ public final class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         checkPermissions();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hasStopped = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hasStopped = true;
     }
 
     /**
@@ -112,8 +125,12 @@ public final class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                startActivity(i);
-                finish();
+                if (!hasStopped) {
+                    startActivity(i);
+                    finish();
+                } else {
+                    this.start();
+                }
             }
         }.start();
     }
