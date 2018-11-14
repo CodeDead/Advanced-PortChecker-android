@@ -385,13 +385,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         edtOutput.append(getString(R.string.string_scan_complete));
         btnScan.setText(getString(R.string.string_scan));
 
-        boolean vibrate = false;
-        if (vibrateOnComplete && displayNotification && !active) {
-            vibrate = false;
-        } else if (vibrateOnComplete && active) {
-            vibrate = true;
-        }
-
+        boolean vibrate = (active && vibrateOnComplete);
         if (vibrate) {
             vibrate();
         }

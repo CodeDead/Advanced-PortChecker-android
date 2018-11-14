@@ -8,9 +8,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -193,7 +195,23 @@ public final class LoadingActivity extends AppCompatActivity {
         if (cm != null) {
             activeNetwork = cm.getActiveNetworkInfo();
         }
-        return activeNetwork != null && (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (cm != null) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+                if (capabilities != null) {
+                    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
+                }
+            }
+        } else {
+            if (cm != null) {
+                if (activeNetwork != null) {
+                    //noinspection deprecation
+                    return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
+                }
+            }
+        }
+        return false;
     }
 
     /**
