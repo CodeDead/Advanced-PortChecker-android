@@ -38,6 +38,7 @@ import com.codedead.advancedportchecker.domain.controller.UtilController;
 import com.codedead.advancedportchecker.domain.object.ScanProgress;
 import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
 
+import java.util.Objects;
 import java.util.Random;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
@@ -149,7 +150,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         displayTimedOut = sharedPreferences.getBoolean("displayTimeOut", true);
         displayClosed = sharedPreferences.getBoolean("displayClosed", true);
         statusColorCoded = sharedPreferences.getBoolean("statusColorCoded", true);
-        timeOut = Integer.parseInt(sharedPreferences.getString("socketTimeout", "200"));
+        timeOut = Integer.parseInt(Objects.requireNonNull(sharedPreferences.getString("socketTimeout", "200")));
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
         displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
         super.onResume();

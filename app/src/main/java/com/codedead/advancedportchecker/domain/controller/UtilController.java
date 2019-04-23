@@ -46,7 +46,7 @@ public final class UtilController {
      * @param address The address that needs to be verified
      * @return True if the input is a valid WEB URL or IP address
      */
-    public static boolean isValidAddress(String address) {
+    static boolean isValidAddress(String address) {
         return Patterns.WEB_URL.matcher(address).matches() || Patterns.IP_ADDRESS.matcher(address).matches();
     }
 }

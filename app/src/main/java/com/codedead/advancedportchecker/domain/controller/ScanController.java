@@ -43,9 +43,10 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         if (endPort < startPort) throw new IllegalArgumentException(context.getString(R.string.string_endport_larger_than_startport));
         if (endPort > 65535 || startPort > 65535) throw new IllegalArgumentException(context.getString(R.string.string_largest_possible_port));
 
-        host = host.replace("http://", "");
-        host = host.replace("https://", "");
-        host = host.replace("ftp://", "");
+        host = host
+                .replace("http://", "")
+                .replace("https://", "")
+                .replace("ftp://", "");
 
         this.host = host;
         this.startPort = startPort;

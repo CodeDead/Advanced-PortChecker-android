@@ -206,7 +206,6 @@ public final class LoadingActivity extends AppCompatActivity {
         } else {
             if (cm != null) {
                 if (activeNetwork != null) {
-                    //noinspection deprecation
                     return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
                 }
             }
