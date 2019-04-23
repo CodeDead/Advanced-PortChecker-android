@@ -40,7 +40,7 @@ public final class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en_US"));
 
         resetTitle();
         super.onCreate(savedInstanceState);

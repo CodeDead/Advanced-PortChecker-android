@@ -56,7 +56,7 @@ public final class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en_US"));
 
         super.onCreate(savedInstanceState);
         resetTitle();
