@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Annuleer</string>
     <string name="string_about">Over</string>
     <string name="string_help">Help</string>
-    <string name="text_about">Advanced PortChecker werd gemaakt door DeadLine.\n\nDeze applicatie kan gebruikt worden om een host te scannen voor open TCP poorten. Gelieve toestemming te vragen aan de host voordat u een scan start.\n\nAfbeeldingen door: Google\n\nCopyright © CodeDead 2018</string>
+    <string name="text_about">Advanced PortChecker werd gemaakt door DeadLine.\n\nDeze applicatie kan gebruikt worden om een host te scannen voor open TCP poorten. Gelieve toestemming te vragen aan de host voordat u een scan start.\n\nAfbeeldingen door: Google\n\nCopyright © 2019 CodeDead</string>
     <string name="text_help">Advanced PortChecker is een applicatie die u kan gebruiken om een host te scannen op open/gesloten TCP poorten. Gelieve zeker te zijn dat u toestemming heeft om een host te scannen!\n\nEen TCP poort kan liggen tussen poort 1 tot en met 65535.\nThe time-out is de hoeveelheid tijd voordat een connectie afgesloten wordt. Indien uw internet traag of niet optimaal is, wordt het aangeraden om de time-out te verhogen om betere resultaten te verkrijgen.\n\nIndien u een fout vindt, mag u ons steeds een mail sturen!</string>
     <string name="text_send_mail">Stuur ons een mail!</string>
     <string name="title_activity_settings">Advanced PortChecker - Instellingen</string>

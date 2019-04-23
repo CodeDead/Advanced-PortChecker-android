@@ -9,8 +9,8 @@
     <string name="string_cancel_scan">Cancelar</string>
     <string name="string_about">Sobre</string>
     <string name="string_help">Ajuda</string>
-    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por: Google\n\nCopyright © CodeDead 2018</string>
-    <string name="text_help">O Advanced PortChecker é um aplicativo que você pode utilizar para encontrar portas TCP abertas/fechadas em um determinado host. Por favor, certifique-se de ter a devida autorização antes de escanear um host!\n\n Uma porta TCP vai de 1 à 65535.\nO 'time-out' é o tempo máximo que uma conexão leva para se conectar à uma determinada porta. Se sua Internet é lenta e/ou irresponsiva, é recomendado que você aumente o tempo limite de resposta, pois os resultados finais poderão ser influenciados e/ou afetados por conta disso.\n\n Se chegar à encontrar algum bug, você é totalmente bem-vindo a nos enviar um email!.</string>
+    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por: Google\n\nCopyright © 2019 CodeDead</string>
+    <string name="text_help">O Advanced PortChecker é um aplicativo que você pode utilizar para encontrar portas TCP abertas/fechadas em um determinado host. Por favor, certifique-se de ter a devida autorização antes de escanear um host!\n\n Uma porta TCP vai de 1 à 65535.\nO \'time-out\' é o tempo máximo que uma conexão leva para se conectar à uma determinada porta. Se sua Internet é lenta e/ou irresponsiva, é recomendado que você aumente o tempo limite de resposta, pois os resultados finais poderão ser influenciados e/ou afetados por conta disso.\n\n Se chegar à encontrar algum bug, você é totalmente bem-vindo a nos enviar um email!</string>
     <string name="text_send_mail">Envie-nos um email!</string>
     <string name="title_activity_settings">Configurações - Advanced PortChecker</string>
     <string name="pref_header_general">Geral</string>
@@ -40,7 +40,7 @@
     <string name="string_notification_scan_complete">O escaneamento foi concluído!</string>
     <string name="channel_description">Notificações do Advanced PortChecker</string>
     <string name="title_activity_about">Advanced PortChecker - Sobre</string>
-    <string name="alert_review_text">Please consider leaving a review if you like this app!</string>
+    <string name="alert_review_text">Por favor, considere deixar um comentário se você gosta deste app!</string>
     <string name="alert_review_never">Nunca</string>
     <string name="string_application_languages">Idioma</string>
     <string name="string_applanguage_summary">O idioma que será exibido no aplicativo</string>
