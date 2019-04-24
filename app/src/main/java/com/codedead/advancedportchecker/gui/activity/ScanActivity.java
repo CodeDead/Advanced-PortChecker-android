@@ -70,7 +70,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        lastLanguage = sharedPreferences.getString("appLanguage", "en_US");
+        lastLanguage = sharedPreferences.getString("appLanguage", "en");
         LocaleHelper.setLocale(this, lastLanguage);
 
         resetTitle();
@@ -135,8 +135,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     @Override
     protected void onResume() {
-        if (!lastLanguage.equals(sharedPreferences.getString("appLanguage", "en_US"))) {
-            LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("language", "en_US"));
+        if (!lastLanguage.equals(sharedPreferences.getString("appLanguage", "en"))) {
+            LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("language", "en"));
             recreate();
         }
 

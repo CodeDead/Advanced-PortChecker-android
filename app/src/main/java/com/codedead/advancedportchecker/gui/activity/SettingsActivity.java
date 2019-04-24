@@ -40,7 +40,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en_US"));
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
         resetTitle();
         super.onCreate(savedInstanceState);
@@ -84,7 +84,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
      * Change the language of the application
      */
     private void changeLanguage() {
-        LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en_US"));
+        LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
         recreate();
     }
 

@@ -67,12 +67,12 @@
     </string-array>
 
     <string-array name="array_languages_values" translatable="false">
-        <item>en_US</item>
-        <item>nl_NL</item>
-        <item>fr_FR</item>
-        <item>de_GE</item>
-        <item>es_ES</item>
-        <item>pt_BR</item>
+        <item>en</item>
+        <item>nl</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>es</item>
+        <item>pt</item>
     </string-array>
 
 </resources>

@@ -26,7 +26,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity imp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en_US"));
+        LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
         resetTitle();
 
         getDelegate().installViewFactory();

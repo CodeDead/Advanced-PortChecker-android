@@ -87,7 +87,7 @@ public class LocaleHelper {
      */
     @TargetApi(Build.VERSION_CODES.N)
     private static Context updateResources(Context context, String language) {
-        Locale locale = getLocale(language);
+        Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
         Configuration configuration = context.getResources().getConfiguration();
@@ -104,7 +104,7 @@ public class LocaleHelper {
      * @return The Context object containing correct resource properties
      */
     private static Context updateResourcesLegacy(Context context, String language) {
-        Locale locale = getLocale(language);
+        Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
         Resources resources = context.getResources();
@@ -115,24 +115,5 @@ public class LocaleHelper {
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
 
         return context;
-    }
-
-    /**
-     * Get a Locale depending on the given language code
-     *
-     * @param language The language (and optionally country) that should be checked
-     * @return The Locale that is associated with the given language code
-     */
-    private static Locale getLocale(String language) {
-        Locale locale;
-        if (language.contains(("_"))) {
-            String[] lang = language.split("_");
-
-            locale = new Locale(lang[0], lang[1]);
-        } else {
-            locale = new Locale(language);
-        }
-
-        return locale;
     }
 }
