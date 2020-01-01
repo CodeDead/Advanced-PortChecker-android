@@ -1,8 +1,10 @@
 package com.codedead.advancedportchecker.gui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +27,12 @@ public final class AboutFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_about, container, false);
+        final View v = inflater.inflate(R.layout.fragment_about, container, false);
 
-        ImageButton btnFacebook = v.findViewById(R.id.BtnFacebook);
-        ImageButton btnTwitter = v.findViewById(R.id.BtnTwitter);
-        ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteAbout);
-        TextView txtAbout = v.findViewById(R.id.TxtAbout);
+        final ImageButton btnFacebook = v.findViewById(R.id.BtnFacebook);
+        final ImageButton btnTwitter = v.findViewById(R.id.BtnTwitter);
+        final ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteAbout);
+        final TextView txtAbout = v.findViewById(R.id.TxtAbout);
 
         btnFacebook.setOnClickListener(this);
         btnTwitter.setOnClickListener(this);

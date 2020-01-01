@@ -6,11 +6,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatDelegate;
+
+import androidx.preference.PreferenceManager;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity imp
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
         resetTitle();
 
@@ -35,9 +37,12 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity imp
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Reset the title text
+     */
     private void resetTitle() {
         try {
-            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            final int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
@@ -100,7 +105,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity imp
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
         getDelegate().onConfigurationChanged(newConfig);

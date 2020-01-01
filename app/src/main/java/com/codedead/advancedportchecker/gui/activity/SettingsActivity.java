@@ -10,10 +10,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
+
+import androidx.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.MenuItem;
 
 import com.codedead.advancedportchecker.R;
@@ -52,7 +58,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
      */
     private void resetTitle() {
         try {
-            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            final int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
@@ -62,7 +68,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
@@ -92,7 +98,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
      * Request the user to confirm a reset of all settings
      */
     private void confirmReset() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.string_confirm_reset);
         builder.setCancelable(false);
 
@@ -116,7 +122,7 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
     private void setupActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // Show the Up button in the action bar.
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -124,13 +130,13 @@ public final class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
-        String stringValue = value.toString();
+        final String stringValue = value.toString();
 
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
             // the preference's 'entries' list.
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringValue);
+            final ListPreference listPreference = (ListPreference) preference;
+            final int index = listPreference.findIndexOfValue(stringValue);
 
             // Set the summary to reflect the new value.
             preference.setSummary(

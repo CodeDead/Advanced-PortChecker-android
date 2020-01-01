@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.activity.LoadingActivity"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".gui.activity.LoadingActivity">
 
     <ImageView
-        android:layout_margin="3dp"
         android:id="@+id/ImgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="3dp"
         android:contentDescription="@string/string_logo"
         app:srcCompat="@mipmap/ic_launcher_round">
 

@@ -14,13 +14,17 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.CountDownTimer;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
+
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -34,19 +38,21 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 public final class LoadingActivity extends AppCompatActivity {
 
     private static final int ACTIVITY_SETTINGS_CODE = 1337;
+    private static final int ACTIVITY_WIFI_CODE = 443;
+
     private WifiManager wifi;
     private static boolean hasStopped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
         resetTitle();
         super.onCreate(savedInstanceState);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        final View decorView = getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.activity_loading);
@@ -71,7 +77,7 @@ public final class LoadingActivity extends AppCompatActivity {
      */
     private void resetTitle() {
         try {
-            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            final int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
@@ -81,7 +87,7 @@ public final class LoadingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
@@ -147,7 +153,7 @@ public final class LoadingActivity extends AppCompatActivity {
 
             // The required permissions have not been granted and thus the app cannot function correctly
             // Close the app
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(R.string.string_give_manual_permissions);
             builder.setCancelable(false);
 
@@ -168,7 +174,7 @@ public final class LoadingActivity extends AppCompatActivity {
                         dialog.cancel();
                     });
 
-            AlertDialog alert = builder.create();
+            final AlertDialog alert = builder.create();
             alert.show();
             return;
         }
@@ -181,30 +187,30 @@ public final class LoadingActivity extends AppCompatActivity {
         if (requestCode == ACTIVITY_SETTINGS_CODE) {
             // Make sure the request was successful
             checkPermissions();
+        } else if (requestCode == ACTIVITY_WIFI_CODE) {
+            delayedWifiCheck();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
      * Check whether an internet connection is available
+     *
      * @return True if an internet connection is available, otherwise false
      */
     private boolean hasInternet() {
-        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = null;
-        if (cm != null) {
-            activeNetwork = cm.getActiveNetworkInfo();
-        }
+        final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (cm != null) {
-                NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+                final NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
                 if (capabilities != null) {
                     return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
                 }
             }
         } else {
             if (cm != null) {
+                final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null) {
                     return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
                 }
@@ -244,15 +250,11 @@ public final class LoadingActivity extends AppCompatActivity {
      * Request the user to enable the Wifi of the device
      */
     private void wifiConfirmationCheck() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+        final DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    // Turn on WiFi
-                    wifi.setWifiEnabled(true);
-                    // Check if WiFi is connected
-                    delayedWifiCheck();
+                    startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), ACTIVITY_WIFI_CODE);
                     break;
-
                 case DialogInterface.BUTTON_NEGATIVE:
                     // Close this app since an internet connection is required
                     finish();
@@ -260,7 +262,7 @@ public final class LoadingActivity extends AppCompatActivity {
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
         builder.setMessage(R.string.string_enable_wifi)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.yes, dialogClickListener)

@@ -6,7 +6,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
 
@@ -19,7 +20,7 @@ public class LocaleHelper {
      * @return The Context object containing correct resource properties
      */
     public static Context onAttach(Context context) {
-        String lang = getPersistedData(context, Locale.getDefault().getLanguage());
+        final String lang = getPersistedData(context, Locale.getDefault().getLanguage());
         return setLocale(context, lang);
     }
 
@@ -31,7 +32,7 @@ public class LocaleHelper {
      * @return The Context object containing correct resource properties
      */
     public static Context onAttach(Context context, String defaultLanguage) {
-        String lang = getPersistedData(context, defaultLanguage);
+        final String lang = getPersistedData(context, defaultLanguage);
         return setLocale(context, lang);
     }
 
@@ -60,7 +61,7 @@ public class LocaleHelper {
      * @return The language code that is stored in the shared preferences
      */
     private static String getPersistedData(Context context, String defaultLanguage) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString("language", defaultLanguage);
     }
 
@@ -87,10 +88,10 @@ public class LocaleHelper {
      */
     @TargetApi(Build.VERSION_CODES.N)
     private static Context updateResources(Context context, String language) {
-        Locale locale = new Locale(language);
+        final Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
-        Configuration configuration = context.getResources().getConfiguration();
+        final Configuration configuration = context.getResources().getConfiguration();
         configuration.setLocale(locale);
 
         return context.createConfigurationContext(configuration);
@@ -104,14 +105,13 @@ public class LocaleHelper {
      * @return The Context object containing correct resource properties
      */
     private static Context updateResourcesLegacy(Context context, String language) {
-        Locale locale = new Locale(language);
+        final Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
-        Resources resources = context.getResources();
+        final Resources resources = context.getResources();
+        final Configuration configuration = resources.getConfiguration();
 
-        Configuration configuration = resources.getConfiguration();
         configuration.locale = locale;
-
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
 
         return context;

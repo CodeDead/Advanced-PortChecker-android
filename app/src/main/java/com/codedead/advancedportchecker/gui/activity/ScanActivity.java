@@ -13,11 +13,14 @@ import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -107,7 +110,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      */
     private void resetTitle() {
         try {
-            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            final int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
@@ -117,7 +120,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
@@ -161,7 +164,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      */
     private void reviewAlert() {
         if (sharedPreferences.getInt("reviewTimes", 0) > 2) return;
-        Random rnd = new Random();
+        final Random rnd = new Random();
 
         new CountDownTimer(rnd.nextInt(180) * 1000, 1000) {
 
@@ -171,7 +174,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
             @Override
             public void onFinish() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
                 builder.setTitle(R.string.app_name);
                 builder.setMessage(R.string.alert_review_text);
                 builder.setCancelable(false);
@@ -193,7 +196,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                     addReview(false);
                 });
 
-                AlertDialog alert = builder.create();
+                final AlertDialog alert = builder.create();
                 if (!isFinishing() && active) {
                     alert.show();
                 } else {
@@ -206,10 +209,11 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     /**
      * Keep track of the amount of times the user has been requested to review the application
+     *
      * @param done True if the user has reviewed or does not want to review the application
      */
     private void addReview(boolean done) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (done) {
             editor.putInt("reviewTimes", 3);
@@ -224,13 +228,13 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Vibrate the device for half a second
      */
     private void vibrate() {
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v == null) return;
 
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        }else{
+        } else {
             //deprecated in API 26
             v.vibrate(500);
         }
@@ -243,14 +247,14 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.app_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
+            final CharSequence name = getString(R.string.app_name);
+            final String description = getString(R.string.channel_description);
+            final int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            final NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            final NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
@@ -261,12 +265,12 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Display a notification in the device
      */
     private void displayNotification() {
-        Intent intent = new Intent(this, ScanActivity.class);
+        final Intent intent = new Intent(this, ScanActivity.class);
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
+        final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_network_wifi_24dp)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.string_notification_scan_complete))
@@ -274,7 +278,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
             notificationManager.notify(1337, mBuilder.build());
         }
@@ -282,6 +286,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     /**
      * Set the availability of certain controls before or after a scan
+     *
      * @param enabled True if all important controls should be enabled, otherwise false
      */
     private void setControlModifiers(boolean enabled) {
@@ -313,7 +318,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         }
 
         try {
-            int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
+            final int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
             pgbScan.setMax(max);
             pgbScan.setProgress(0);
             progress = 0;
@@ -339,7 +344,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.scan_menu, menu);
         return true;
     }
@@ -386,7 +391,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         edtOutput.append(getString(R.string.string_scan_complete));
         btnScan.setText(getString(R.string.string_scan));
 
-        boolean vibrate = (active && vibrateOnComplete);
+        final boolean vibrate = (active && vibrateOnComplete);
         if (vibrate) {
             vibrate();
         }

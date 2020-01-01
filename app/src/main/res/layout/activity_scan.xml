@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.activity.ScanActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".gui.activity.ScanActivity">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -22,11 +22,12 @@
                 android:layout_height="0dp"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:padding="5dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/string_localhost"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:maxLines="1"
+                android:padding="5dp"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -51,9 +52,10 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_edittext"
                     android:hint="@string/string_hint_one"
-                    android:padding="5dp"
+                    android:importantForAutofill="no"
                     android:inputType="numberSigned"
                     android:maxLines="1"
+                    android:padding="5dp"
                     android:textSize="20sp" />
 
                 <TextView
@@ -71,11 +73,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:padding="5dp"
                     android:background="@drawable/rounded_edittext"
                     android:hint="@string/string_hint_one"
+                    android:importantForAutofill="no"
                     android:inputType="numberSigned"
                     android:maxLines="1"
+                    android:padding="5dp"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -96,7 +99,7 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <EditText
         android:id="@+id/EdtScanOutput"
@@ -105,10 +108,11 @@
         android:layout_margin="3dp"
         android:layout_weight="1"
         android:background="@drawable/bordered_edittext"
+        android:gravity="top"
+        android:importantForAutofill="no"
         android:inputType=""
         android:padding="5dp"
         android:textIsSelectable="true"
-        android:gravity="top"
         android:textSize="20sp"
         tools:ignore="LabelFor" />
 

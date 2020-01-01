@@ -29,8 +29,8 @@
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/string_socket_timeout"
-        android:summary="@string/string_socket_timeout_summary"/>
+        android:summary="@string/string_socket_timeout_summary"
+        android:title="@string/string_socket_timeout" />
 
     <ListPreference
         android:defaultValue="en"
@@ -39,7 +39,7 @@
         android:key="appLanguage"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/string_application_languages"
-        android:summary="@string/string_applanguage_summary"/>
+        android:summary="@string/string_applanguage_summary"
+        android:title="@string/string_application_languages" />
 
 </PreferenceScreen>

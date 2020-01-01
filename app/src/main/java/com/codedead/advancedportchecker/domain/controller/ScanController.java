@@ -23,6 +23,7 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
     /**
      * Initialize a new ScanController
+     *
      * @param context   The context that can be used to retrieve error messages
      * @param host      The host address that needs to be scanned
      * @param startPort The initial port for a range of ports that need to be scanned
@@ -35,13 +36,19 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
                           AsyncResponse response) {
 
         if (context == null) throw new NullPointerException("Context cannot be null!");
-        if (host == null || host.isEmpty() || !UtilController.isValidAddress(host)) throw new IllegalArgumentException(context.getString(R.string.string_invalid_host));
-        if (response == null) throw new NullPointerException(context.getString(R.string.asyncResponse_null_exception));
+        if (host == null || host.isEmpty() || !UtilController.isValidAddress(host))
+            throw new IllegalArgumentException(context.getString(R.string.string_invalid_host));
+        if (response == null)
+            throw new NullPointerException(context.getString(R.string.asyncResponse_null_exception));
 
-        if (startPort < 1) throw new IllegalArgumentException(context.getString(R.string.string_invalid_startport));
-        if (endPort < 1) throw new IllegalArgumentException(context.getString(R.string.string_invalid_endport));
-        if (endPort < startPort) throw new IllegalArgumentException(context.getString(R.string.string_endport_larger_than_startport));
-        if (endPort > 65535 || startPort > 65535) throw new IllegalArgumentException(context.getString(R.string.string_largest_possible_port));
+        if (startPort < 1)
+            throw new IllegalArgumentException(context.getString(R.string.string_invalid_startport));
+        if (endPort < 1)
+            throw new IllegalArgumentException(context.getString(R.string.string_invalid_endport));
+        if (endPort < startPort)
+            throw new IllegalArgumentException(context.getString(R.string.string_endport_larger_than_startport));
+        if (endPort > 65535 || startPort > 65535)
+            throw new IllegalArgumentException(context.getString(R.string.string_largest_possible_port));
 
         host = host
                 .replace("http://", "")
@@ -84,13 +91,14 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
     /**
      * Scan a host using TCP
+     *
      * @param host    The host that needs to be scanned
      * @param port    The port that needs to be scanned
      * @param timeOut The time it takes before a connection is closed due to a time-out
      * @return A ScanProgress object containing the result of the scan
      */
     private static ScanProgress scanTcp(String host, int port, int timeOut) {
-        ScanProgress scan = new ScanProgress(host, port);
+        final ScanProgress scan = new ScanProgress(host, port);
         try {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(host, port), timeOut);

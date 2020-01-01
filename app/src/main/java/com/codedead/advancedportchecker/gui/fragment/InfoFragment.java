@@ -1,9 +1,11 @@
 package com.codedead.advancedportchecker.gui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ShareCompat;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.ShareCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +25,10 @@ public final class InfoFragment extends Fragment implements View.OnClickListener
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_info, container, false);
+        final View v = inflater.inflate(R.layout.fragment_info, container, false);
 
-        ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteInfo);
-        ImageButton btnSupport = v.findViewById(R.id.BtnSendMail);
+        final ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteInfo);
+        final ImageButton btnSupport = v.findViewById(R.id.BtnSendMail);
 
         btnWebsite.setOnClickListener(this);
         btnSupport.setOnClickListener(this);

@@ -8,11 +8,13 @@ public final class ScanProgress {
 
     /**
      * Initialize a new ScanProgress object
+     *
      * @param host The host that was scanned
      * @param port The port that was scanned
      */
     public ScanProgress(String host, int port) {
-        if (host == null || host.isEmpty()) throw new IllegalArgumentException("Host cannot be null or empty!");
+        if (host == null || host.isEmpty())
+            throw new IllegalArgumentException("Host cannot be null or empty!");
 
         this.host = host;
         this.port = port;
@@ -21,6 +23,7 @@ public final class ScanProgress {
 
     /**
      * Set the status of a scan
+     *
      * @param status The status of the scan
      */
     public void setStatus(ScanStatus status) {
@@ -30,6 +33,7 @@ public final class ScanProgress {
 
     /**
      * Get the status of a scan
+     *
      * @return The status of a scan
      */
     public ScanStatus getStatus() {
@@ -38,6 +42,7 @@ public final class ScanProgress {
 
     /**
      * Get the full address of the host that was scanned including the port
+     *
      * @return The full address of the host that was scanned including the port
      */
     public String getFullHost() {

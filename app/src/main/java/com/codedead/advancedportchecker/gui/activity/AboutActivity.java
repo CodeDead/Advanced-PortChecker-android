@@ -5,11 +5,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.preference.PreferenceManager;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.MenuItem;
 
 import com.codedead.advancedportchecker.R;
@@ -31,19 +36,19 @@ public final class AboutActivity extends AppCompatActivity {
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-                switch (item.getItemId()) {
-                    case R.id.nav_about_about:
-                        switchFragment(0);
-                        return true;
-                    case R.id.nav_about_help:
-                        switchFragment(1);
-                        return true;
-                }
-                return false;
-            };
+        switch (item.getItemId()) {
+            case R.id.nav_about_about:
+                switchFragment(0);
+                return true;
+            case R.id.nav_about_help:
+                switchFragment(1);
+                return true;
+        }
+        return false;
+    };
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
@@ -55,7 +60,7 @@ public final class AboutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
         super.onCreate(savedInstanceState);
@@ -67,7 +72,7 @@ public final class AboutActivity extends AppCompatActivity {
         aboutFragment = new AboutFragment();
         infoFragment = new InfoFragment();
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        final BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
@@ -76,7 +81,7 @@ public final class AboutActivity extends AppCompatActivity {
      */
     private void resetTitle() {
         try {
-            int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
+            final int label = getPackageManager().getActivityInfo(getComponentName(), GET_META_DATA).labelRes;
             if (label != 0) {
                 setTitle(label);
             }
@@ -113,10 +118,11 @@ public final class AboutActivity extends AppCompatActivity {
 
     /**
      * Switch the active fragment
+     *
      * @param selected The index of the fragment that should be displayed
      */
     private void switchFragment(int selected) {
-        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
 
         selectedFragment = selected;

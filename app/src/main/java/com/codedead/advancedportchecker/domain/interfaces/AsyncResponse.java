@@ -4,6 +4,8 @@ import com.codedead.advancedportchecker.domain.object.ScanProgress;
 
 public interface AsyncResponse {
     void scanComplete();
+
     void scanCancelled();
+
     void update(ScanProgress scanProgress);
 }
