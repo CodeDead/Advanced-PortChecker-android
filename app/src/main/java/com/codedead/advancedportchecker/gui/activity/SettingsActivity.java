@@ -23,11 +23,9 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
@@ -45,12 +43,17 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private final SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-            if (key.equals("appLanguage")) {
-                LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
-                recreate();
+    private final SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
+        if (key.equals("appLanguage")) {
+            LocaleHelper.setLocale(getApplicationContext(), prefs.getString("appLanguage", "en"));
+            recreate();
+        } else if (key.equals("socketTimeout")) {
+            try {
+                Integer.parseInt(prefs.getString("socketTimeout", "200"));
+            } catch (NumberFormatException ex) {
+                final SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("socketTimeout", "200");
+                editor.apply();
             }
         }
     };
