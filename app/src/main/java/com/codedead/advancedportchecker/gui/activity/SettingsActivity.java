@@ -28,7 +28,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        sharedPreferences.registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> onSharedPreferenceChanged(key));
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
         resetTitle();
@@ -44,24 +45,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Method that is called when the value of a key inside the SharedPreferences changes
-     *
-     * @param key The key of the value that was changed
-     */
-    private void onSharedPreferenceChanged(String key) {
-        if (key.equals("appLanguage")) {
-            changeLanguage();
+    private final SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+            if (key.equals("appLanguage")) {
+                LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
+                recreate();
+            }
         }
-    }
-
-    /**
-     * Change the language of the activity
-     */
-    private void changeLanguage() {
-        LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("appLanguage", "en"));
-        recreate();
-    }
+    };
 
     /**
      * Reset the title of the activity
