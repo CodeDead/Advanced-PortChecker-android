@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright 2018 The app Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/pref_header_general">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="displayTimeOut"
+            app:title="@string/string_display_timeouts" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="displayClosed"
+            app:title="@string/string_display_closed" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="statusColorCoded"
+            app:summary="@string/scanStatus_colorCoded_summary"
+            app:title="@string/scanStatus_colorCoded" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="keepScreenOn"
+            app:summary="@string/string_screenOn_hint"
+            app:title="@string/string_keep_screen_on" />
+
+        <EditTextPreference
+            app:defaultValue="200"
+            app:key="socketTimeout"
+            app:summary="@string/string_socket_timeout_summary"
+            app:title="@string/string_socket_timeout" />
+
+        <ListPreference
+            app:defaultValue="en"
+            app:entries="@array/array_languages"
+            app:entryValues="@array/array_languages_values"
+            app:key="appLanguage"
+            app:negativeButtonText="@null"
+            app:positiveButtonText="@null"
+            app:summary="@string/string_applanguage_summary"
+            app:title="@string/string_application_languages" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_header_notifications">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="notificationOnComplete"
+            app:title="@string/string_display_notification_scan_finished" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="vibrateOnComplete"
+            app:title="@string/string_vibrate_on_complete" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

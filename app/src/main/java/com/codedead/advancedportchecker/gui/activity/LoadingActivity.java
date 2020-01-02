@@ -7,12 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.CountDownTimer;
 
 import androidx.preference.PreferenceManager;
@@ -32,6 +27,7 @@ import android.widget.Toast;
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 import com.codedead.advancedportchecker.domain.controller.UtilController;
+import com.codedead.advancedportchecker.domain.object.NetworkUtils;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
@@ -40,7 +36,7 @@ public final class LoadingActivity extends AppCompatActivity {
     private static final int ACTIVITY_SETTINGS_CODE = 1337;
     private static final int ACTIVITY_WIFI_CODE = 443;
 
-    private WifiManager wifi;
+    private NetworkUtils networkUtils;
     private static boolean hasStopped;
 
     @Override
@@ -56,6 +52,7 @@ public final class LoadingActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         setContentView(R.layout.activity_loading);
+        networkUtils = new NetworkUtils(this);
 
         checkPermissions();
     }
@@ -195,52 +192,15 @@ public final class LoadingActivity extends AppCompatActivity {
 
     /**
      * Check whether an internet connection is available
-     *
-     * @return True if an internet connection is available, otherwise false
-     */
-    private boolean hasInternet() {
-        final ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (cm != null) {
-                final NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
-                if (capabilities != null) {
-                    return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR);
-                }
-            }
-        } else {
-            if (cm != null) {
-                final NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                if (activeNetwork != null) {
-                    return activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if Wifi is enabled. If Wifi is not enabled, request the user to enable Wifi
-     */
-    private void checkWifiState() {
-        if (!wifi.isWifiEnabled()) {
-            wifiConfirmationCheck();
-        } else {
-            delayedWifiCheck();
-        }
-    }
-
-    /**
-     * Check whether an internet connection is available
      */
     private void checkConnectivity() {
-        // Initialize WifiManager
-        wifi = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
         // Check if an internet connection is available
-        if (!hasInternet()) {
-            // Check if the wifi module on the device is enabled or not
-            checkWifiState();
+        if (!networkUtils.hasNetworkConnection()) {
+            if (!networkUtils.isWifiEnabled()) {
+                wifiConfirmationCheck();
+            } else {
+                delayedWifiCheck();
+            }
         } else {
             continueLoading();
         }
@@ -284,7 +244,7 @@ public final class LoadingActivity extends AppCompatActivity {
             public void onFinish() {
                 // No need for this code if the app is already finishing
                 if (isFinishing()) return;
-                if (hasInternet()) {
+                if (networkUtils.hasNetworkConnection()) {
                     // Load the next screen because an internet connection is available
                     continueLoading();
                 } else {

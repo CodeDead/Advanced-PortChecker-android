@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Cancelar</string>
     <string name="string_about">Sobre</string>
     <string name="string_help">Ayuda</string>
-    <string name="text_about">Advanced PortChecker fue creado por DeadLine.\n\nEsta aplicación se puede usar para escanear un host en busca de puertos TCP abiertos. ¡Por favor, asegúrese de tener los permisos apropiados antes de escanear un host!\n\nImágenes de:\n* Google\n\nTraducciones:\n* Portugués (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2019 CodeDead</string>
+    <string name="text_about">Advanced PortChecker fue creado por DeadLine.\n\nEsta aplicación se puede usar para escanear un host en busca de puertos TCP abiertos. ¡Por favor, asegúrese de tener los permisos apropiados antes de escanear un host!\n\nImágenes de:\nGoogle\n\nTraducciones:\n- Portugués (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2020 CodeDead</string>
     <string name="text_help">Advanced PortChecker es una aplicación que puede usar para escanear un host para puertos TCP abiertos/cerrados. ¡Asegúrese de tener permiso para escanear un host antes de iniciar el escaneo!\n\nUn puerto TCP varía de 1 a 65535.\nEl tiempo de espera es el tiempo que transcurre antes de que se cierre una conexión activa. Si su conexión a Internet es lenta y / o no responde, se recomienda aumentar el tiempo de espera porque los resultados pueden no ser precisos.\n\nSi encuentra un error, ¡puede enviarnos un correo electrónico!</string>
     <string name="text_send_mail">Envíenos un correo!</string>
     <string name="title_activity_settings">Advanced PortChecker - Configuraciones</string>

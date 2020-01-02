@@ -38,6 +38,7 @@ import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 import com.codedead.advancedportchecker.domain.controller.ScanController;
 import com.codedead.advancedportchecker.domain.controller.UtilController;
+import com.codedead.advancedportchecker.domain.object.NetworkUtils;
 import com.codedead.advancedportchecker.domain.object.ScanProgress;
 import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
 
@@ -68,6 +69,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     private boolean active;
 
+    private NetworkUtils networkUtils;
     private String lastLanguage;
 
     @Override
@@ -79,8 +81,6 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         resetTitle();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         edtHost = findViewById(R.id.EdtHost);
         edtStartPort = findViewById(R.id.EdtStartPort);
@@ -103,6 +103,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
         createNotificationChannel();
         reviewAlert();
+        networkUtils = new NetworkUtils(this);
     }
 
     /**
@@ -138,8 +139,9 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     @Override
     protected void onResume() {
-        if (!lastLanguage.equals(sharedPreferences.getString("appLanguage", "en"))) {
-            LocaleHelper.setLocale(getApplicationContext(), sharedPreferences.getString("language", "en"));
+        final String selectedLanguage =sharedPreferences.getString("appLanguage", "en");
+        if (!lastLanguage.equals(selectedLanguage)) {
+            LocaleHelper.setLocale(getApplicationContext(), selectedLanguage);
             recreate();
         }
 
@@ -307,6 +309,11 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     private void startScan() {
         if (scanController != null && !scanController.isCancelled()) return;
 
+        if (!networkUtils.hasNetworkConnection()) {
+            UtilController.showAlert(this, getString(R.string.string_no_internet));
+            return;
+        }
+
         if (edtStartPort.getText().toString().length() == 0) {
             UtilController.showAlert(this, getString(R.string.string_invalid_startport));
             return;
@@ -361,7 +368,6 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
             case R.id.nav_scan_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
-            case android.R.id.home:
             case R.id.nav_scan_exit:
                 finish();
                 break;
