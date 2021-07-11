@@ -11,7 +11,7 @@ import com.codedead.advancedportchecker.domain.controller.LocaleHelper;
 public final class Runner extends Application {
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(final Context base) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(base);
         super.attachBaseContext(LocaleHelper.onAttach(base, sharedPref.getString("appLanguage", "en")));
     }

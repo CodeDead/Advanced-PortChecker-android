@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Cancelar</string>
     <string name="string_about">Sobre</string>
     <string name="string_help">Ajuda</string>
-    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por:\nGoogle\n\nTraduções:\n- Português (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2020 CodeDead</string>
+    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por:\nGoogle\n\nTraduções:\n- Português (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2021 CodeDead</string>
     <string name="text_help">O Advanced PortChecker é um aplicativo que você pode utilizar para encontrar portas TCP abertas/fechadas em um determinado host. Por favor, certifique-se de ter a devida autorização antes de escanear um host!\n\n Uma porta TCP vai de 1 à 65535.\nO \'time-out\' é o tempo máximo que uma conexão leva para se conectar à uma determinada porta. Se sua Internet é lenta e/ou irresponsiva, é recomendado que você aumente o tempo limite de resposta, pois os resultados finais poderão ser influenciados e/ou afetados por conta disso.\n\n Se chegar à encontrar algum bug, você é totalmente bem-vindo a nos enviar um email!</string>
     <string name="text_send_mail">Envie-nos um email!</string>
     <string name="title_activity_settings">Configurações - Advanced PortChecker</string>
@@ -22,8 +22,6 @@
     <string name="string_socket_timeout">Tempo limite de resposta do socket</string>
     <string name="string_vibrate_on_complete">Vibrar quando um escaneamento for concluído</string>
     <string name="string_socket_timeout_summary">Tempo que uma conexão leva até ser considerada como expirada (ms)</string>
-    <string name="string_reset_settings">Restaurar todas às configurações</string>
-    <string name="string_confirm_reset">Você tem certeza de que deseja redefinir todas as configurações para os valores padrões?</string>
     <string name="string_give_manual_permissions">Você gostaria de conceder às permissões manualmente?</string>
     <string name="string_networkpermissions_required">Permissões de rede são necessárias para executar este aplicativo!</string>
     <string name="string_enable_wifi">Você gostaria de ativar o Wi-Fi?</string>

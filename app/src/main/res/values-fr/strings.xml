@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Annuler</string>
     <string name="string_about">À propos</string>
     <string name="string_help">Aide</string>
-    <string name="text_about">Advanced PortChecker a été créé par DeadLine.\n\nCette application peut être utilisée pour analyser un hôte pour les ports TCP ouverts. Assurez-vous de disposer des autorisations appropriées avant de scanner un hôte!\n\nImages par:\nGoogle\n\nTraductions:\n- Portugais (Brésil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2020 CodeDead</string>
+    <string name="text_about">Advanced PortChecker a été créé par DeadLine.\n\nCette application peut être utilisée pour analyser un hôte pour les ports TCP ouverts. Assurez-vous de disposer des autorisations appropriées avant de scanner un hôte!\n\nImages par:\nGoogle\n\nTraductions:\n- Portugais (Brésil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2021 CodeDead</string>
     <string name="text_help">Advanced PortChecker est une application que vous pouvez utiliser pour analyser un hôte pour les ports TCP ouverts/fermés. Veuillez vous assurer que vous avez la permission de scanner un hôte avant de commencer l\'analyse!\n\nUn port TCP est compris entre 1 et 65535.\nLe délai d\'attente est le temps qu\'il faut avant qu\'une connexion active soit fermée. Si votre connexion Internet est lente et/ou ne répond pas, il est recommandé d\'augmenter le délai d\'attente car vos résultats risquent de ne pas être exacts.\n\nSi vous trouvez un bug, vous pouvez nous envoyer un email!</string>
     <string name="text_send_mail">Envoyez-nous un mail!</string>
     <string name="title_activity_settings">Advanced PortChecker - Paramètres</string>
@@ -22,8 +22,6 @@
     <string name="string_socket_timeout">Délai d\'attente de socket</string>
     <string name="string_vibrate_on_complete">Vibrer lorsque l\'analyse est terminée</string>
     <string name="string_socket_timeout_summary">Le temps qu\'il faut avant qu\'une connexion soit marquée comme étant expiré (ms)</string>
-    <string name="string_reset_settings">Réinitialiser tous les réglages</string>
-    <string name="string_confirm_reset">Êtes-vous sûr de vouloir réinitialiser tous les paramètres à leurs valeurs par défaut?</string>
     <string name="string_give_manual_permissions">Voulez-vous donner manuellement des autorisations?</string>
     <string name="string_networkpermissions_required">Les autorisations réseau sont nécessaires pour exécuter cette application!</string>
     <string name="string_enable_wifi">Voulez-vous activer le wifi?</string>

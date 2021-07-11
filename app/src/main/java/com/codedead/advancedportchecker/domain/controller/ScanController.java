@@ -14,12 +14,12 @@ import java.net.SocketTimeoutException;
 
 public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
 
-    private String host;
-    private int startPort;
-    private int endPort;
-    private int timeOut;
+    private final String host;
+    private final int startPort;
+    private final int endPort;
+    private final int timeOut;
 
-    private AsyncResponse response;
+    private final AsyncResponse response;
 
     /**
      * Initialize a new ScanController
@@ -31,9 +31,9 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
      * @param timeOut   The time it takes before a connection is marked as timed-out
      * @param response  The AsyncResponse that can be called when a scan has finished or been cancelled
      */
-    public ScanController(Context context, String host, int startPort,
-                          int endPort, int timeOut,
-                          AsyncResponse response) {
+    public ScanController(final Context context, String host, final int startPort,
+                          final int endPort, final int timeOut,
+                          final AsyncResponse response) {
 
         if (context == null) throw new NullPointerException("Context cannot be null!");
         if (host == null || host.isEmpty() || !UtilController.isValidAddress(host))
@@ -47,7 +47,7 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
             throw new IllegalArgumentException(context.getString(R.string.string_invalid_endport));
         if (endPort < startPort)
             throw new IllegalArgumentException(context.getString(R.string.string_endport_larger_than_startport));
-        if (endPort > 65535 || startPort > 65535)
+        if (endPort > 65535)
             throw new IllegalArgumentException(context.getString(R.string.string_largest_possible_port));
 
         host = host
@@ -63,7 +63,7 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Void doInBackground(final Void... voids) {
         int currentPort = startPort;
         while (currentPort <= endPort) {
             if (isCancelled()) {
@@ -76,13 +76,13 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(final Void aVoid) {
         response.scanComplete();
         super.onPostExecute(aVoid);
     }
 
     @Override
-    protected void onProgressUpdate(ScanProgress... values) {
+    protected void onProgressUpdate(final ScanProgress... values) {
         if (isCancelled()) return;
 
         response.update(values[0]);
@@ -97,16 +97,16 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
      * @param timeOut The time it takes before a connection is closed due to a time-out
      * @return A ScanProgress object containing the result of the scan
      */
-    private static ScanProgress scanTcp(String host, int port, int timeOut) {
+    private static ScanProgress scanTcp(final String host, final int port, final int timeOut) {
         final ScanProgress scan = new ScanProgress(host, port);
         try {
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(host, port), timeOut);
-            socket.close();
+            try (final Socket socket = new Socket()) {
+                socket.connect(new InetSocketAddress(host, port), timeOut);
+            }
             scan.setStatus(ScanStatus.OPEN);
-        } catch (SocketTimeoutException ce) {
+        } catch (final SocketTimeoutException ce) {
             scan.setStatus(ScanStatus.TIMEOUT);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             scan.setStatus(ScanStatus.CLOSED);
         }
 

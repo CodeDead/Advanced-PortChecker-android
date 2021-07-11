@@ -24,7 +24,7 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener);
@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
@@ -81,19 +81,19 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(final Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
             final EditTextPreference editTextPreference = getPreferenceManager().findPreference("socketTimeout");
