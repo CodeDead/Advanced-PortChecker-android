@@ -73,7 +73,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     private String lastLanguage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         lastLanguage = sharedPreferences.getString("appLanguage", "en");
         LocaleHelper.setLocale(this, lastLanguage);
@@ -121,13 +121,13 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(final Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
@@ -165,7 +165,9 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Display an alert to the user, requesting to review the application
      */
     private void reviewAlert() {
-        if (sharedPreferences.getInt("reviewTimes", 0) > 2) return;
+        if (sharedPreferences.getInt("reviewTimes", 0) > 2)
+            return;
+
         final Random rnd = new Random();
 
         new CountDownTimer(rnd.nextInt(180) * 1000, 1000) {
@@ -291,7 +293,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      *
      * @param enabled True if all important controls should be enabled, otherwise false
      */
-    private void setControlModifiers(boolean enabled) {
+    private void setControlModifiers(final boolean enabled) {
         edtHost.setEnabled(enabled);
         edtStartPort.setEnabled(enabled);
         edtEndPort.setEnabled(enabled);
@@ -307,7 +309,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Start a new scan
      */
     private void startScan() {
-        if (scanController != null && !scanController.isCancelled()) return;
+        if (scanController != null && !scanController.isCancelled())
+            return;
 
         if (!networkUtils.hasNetworkConnection()) {
             UtilController.showAlert(this, getString(R.string.string_no_internet));
@@ -336,7 +339,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
             edtOutput.setText("");
             btnScan.setText(getString(R.string.string_cancel_scan));
             setControlModifiers(!edtHost.isEnabled());
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             UtilController.showAlert(this, ex.getMessage());
         }
     }
@@ -350,27 +353,23 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.scan_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_scan_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
-            case R.id.nav_scan_clear_output:
-                edtOutput.setText("");
-                break;
-            case R.id.nav_scan_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-            case R.id.nav_scan_exit:
-                finish();
-                break;
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_scan_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if (itemId == R.id.nav_scan_clear_output) {
+            edtOutput.setText("");
+        } else if (itemId == R.id.nav_scan_about) {
+            startActivity(new Intent(this, AboutActivity.class));
+        } else if (itemId == R.id.nav_scan_exit) {
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -416,7 +415,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     }
 
     @Override
-    public void update(ScanProgress scanProgress) {
+    public void update(final ScanProgress scanProgress) {
         progress++;
 
         boolean display = true;

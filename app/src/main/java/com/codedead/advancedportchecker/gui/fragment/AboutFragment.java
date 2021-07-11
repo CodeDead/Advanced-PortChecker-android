@@ -21,11 +21,11 @@ public final class AboutFragment extends Fragment implements View.OnClickListene
      * Initialize a new AboutFragment
      */
     public AboutFragment() {
-        // Required empty public constructor
+        // Default constructor
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
 
@@ -43,19 +43,17 @@ public final class AboutFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
-    public void onClick(View v) {
-        if (getContext() == null) return;
+    public void onClick(final View v) {
+        if (getContext() == null)
+            return;
 
-        switch (v.getId()) {
-            case R.id.BtnFacebook:
-                UtilController.openWebsite(getContext(), "https://facebook.com/deadlinecodedead/");
-                break;
-            case R.id.BtnTwitter:
-                UtilController.openWebsite(getContext(), "https://twitter.com/C0DEDEAD");
-                break;
-            case R.id.BtnWebsiteAbout:
-                UtilController.openWebsite(getContext(), "https://codedead.com/");
-                break;
+        int id = v.getId();
+        if (id == R.id.BtnFacebook) {
+            UtilController.openWebsite(getContext(), "https://facebook.com/deadlinecodedead/");
+        } else if (id == R.id.BtnTwitter) {
+            UtilController.openWebsite(getContext(), "https://twitter.com/C0DEDEAD");
+        } else if (id == R.id.BtnWebsiteAbout) {
+            UtilController.openWebsite(getContext(), "https://codedead.com/");
         }
     }
 }
