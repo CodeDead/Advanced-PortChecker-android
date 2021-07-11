@@ -40,7 +40,7 @@ public final class LoadingActivity extends AppCompatActivity {
     private static boolean hasStopped;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
@@ -78,19 +78,19 @@ public final class LoadingActivity extends AppCompatActivity {
             if (label != 0) {
                 setTitle(label);
             }
-        } catch (PackageManager.NameNotFoundException ex) {
+        } catch (final PackageManager.NameNotFoundException ex) {
             UtilController.showAlert(this, ex.getMessage());
         }
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(final Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
@@ -124,7 +124,7 @@ public final class LoadingActivity extends AppCompatActivity {
 
         new CountDownTimer(4000, 1000) {
             @Override
-            public void onTick(long millisUntilFinished) {
+            public void onTick(final long millisUntilFinished) {
 
             }
 
@@ -141,7 +141,7 @@ public final class LoadingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
@@ -180,7 +180,7 @@ public final class LoadingActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == ACTIVITY_SETTINGS_CODE) {
             // Make sure the request was successful
             checkPermissions();

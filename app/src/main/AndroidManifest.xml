@@ -23,7 +23,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".gui.activity.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".gui.activity.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

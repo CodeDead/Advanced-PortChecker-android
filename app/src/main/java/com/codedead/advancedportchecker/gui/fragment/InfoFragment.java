@@ -20,11 +20,11 @@ public final class InfoFragment extends Fragment implements View.OnClickListener
      * Initialize a new InfoFragment
      */
     public InfoFragment() {
-        // Required empty public constructor
+        // Default constructor
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_info, container, false);
 
         final ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteInfo);
@@ -37,22 +37,22 @@ public final class InfoFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.BtnWebsiteInfo:
-                if (getContext() == null) return;
-                UtilController.openWebsite(getContext(), "https://codedead.com/?page_id=145");
-                break;
-            case R.id.BtnSendMail:
-                if (getActivity() == null) return;
-                ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("message/rfc822")
-                        .addEmailTo("admin@codedead.com")
-                        .setSubject("Advanced PortChecker - Android")
-                        .setText("")
-                        .setChooserTitle(getString(R.string.text_send_mail))
-                        .startChooser();
-                break;
+    public void onClick(final View v) {
+        int id = v.getId();
+        if (id == R.id.BtnWebsiteInfo) {
+            if (getContext() == null)
+                return;
+            UtilController.openWebsite(getContext(), "https://codedead.com/?page_id=145");
+        } else if (id == R.id.BtnSendMail) {
+            if (getActivity() == null)
+                return;
+            ShareCompat.IntentBuilder.from(getActivity())
+                    .setType("message/rfc822")
+                    .addEmailTo("admin@codedead.com")
+                    .setSubject("Advanced PortChecker - Android")
+                    .setText("")
+                    .setChooserTitle(getString(R.string.text_send_mail))
+                    .startChooser();
         }
     }
 }

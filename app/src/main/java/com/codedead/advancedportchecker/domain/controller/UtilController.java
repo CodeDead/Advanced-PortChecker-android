@@ -16,13 +16,13 @@ public final class UtilController {
      * @param context The context that can be used to start the activity
      * @param url     The URL that should be opened
      */
-    public static void openWebsite(Context context, String url) {
+    public static void openWebsite(final Context context, final String url) {
         try {
             final Uri uri = Uri.parse(url);
             final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
             context.startActivity(intent);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -33,7 +33,7 @@ public final class UtilController {
      * @param context The context that can be used to display the alert
      * @param message The message that needs to be displayed to the user
      */
-    public static void showAlert(Context context, String message) {
+    public static void showAlert(final Context context, final String message) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message);
         builder.setCancelable(true);
@@ -42,7 +42,7 @@ public final class UtilController {
                 android.R.string.ok,
                 (dialog, id) -> dialog.cancel());
 
-        AlertDialog alert = builder.create();
+        final AlertDialog alert = builder.create();
         alert.show();
     }
 

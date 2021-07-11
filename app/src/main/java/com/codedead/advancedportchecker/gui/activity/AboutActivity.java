@@ -34,32 +34,32 @@ public final class AboutActivity extends AppCompatActivity {
 
     private static final String fragmentKey = "selectedFragment";
 
-    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
-        switch (item.getItemId()) {
-            case R.id.nav_about_about:
-                switchFragment(0);
-                return true;
-            case R.id.nav_about_help:
-                switchFragment(1);
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_about_about) {
+            switchFragment(0);
+            return true;
+        } else if (itemId == R.id.nav_about_help) {
+            switchFragment(1);
+            return true;
         }
         return false;
     };
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleHelper.onAttach(getBaseContext());
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(final Context base) {
         super.attachBaseContext(LocaleHelper.onAttach(base));
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         LocaleHelper.setLocale(this, sharedPreferences.getString("appLanguage", "en"));
 
@@ -67,13 +67,14 @@ public final class AboutActivity extends AppCompatActivity {
         resetTitle();
         setContentView(R.layout.activity_about);
 
-        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         aboutFragment = new AboutFragment();
         infoFragment = new InfoFragment();
 
         final BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     /**
@@ -85,13 +86,13 @@ public final class AboutActivity extends AppCompatActivity {
             if (label != 0) {
                 setTitle(label);
             }
-        } catch (PackageManager.NameNotFoundException ex) {
+        } catch (final PackageManager.NameNotFoundException ex) {
             UtilController.showAlert(this, ex.getMessage());
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
@@ -105,13 +106,13 @@ public final class AboutActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         outState.putInt(fragmentKey, selectedFragment);
         super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         selectedFragment = savedInstanceState.getInt(fragmentKey, 0);
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -121,7 +122,7 @@ public final class AboutActivity extends AppCompatActivity {
      *
      * @param selected The index of the fragment that should be displayed
      */
-    private void switchFragment(int selected) {
+    private void switchFragment(final int selected) {
         final FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         Fragment fragment;
 

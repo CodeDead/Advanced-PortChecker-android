@@ -7,5 +7,5 @@ public interface AsyncResponse {
 
     void scanCancelled();
 
-    void update(ScanProgress scanProgress);
+    void update(final ScanProgress scanProgress);
 }

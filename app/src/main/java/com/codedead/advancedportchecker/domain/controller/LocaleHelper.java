@@ -19,7 +19,7 @@ public class LocaleHelper {
      * @param context The Context object that is attached
      * @return The Context object containing correct resource properties
      */
-    public static Context onAttach(Context context) {
+    public static Context onAttach(final Context context) {
         final String lang = getPersistedData(context, Locale.getDefault().getLanguage());
         return setLocale(context, lang);
     }
@@ -31,7 +31,7 @@ public class LocaleHelper {
      * @param defaultLanguage The default language code
      * @return The Context object containing correct resource properties
      */
-    public static Context onAttach(Context context, String defaultLanguage) {
+    public static Context onAttach(final Context context, final String defaultLanguage) {
         final String lang = getPersistedData(context, defaultLanguage);
         return setLocale(context, lang);
     }
@@ -43,7 +43,7 @@ public class LocaleHelper {
      * @param language The language that should be attached
      * @return The Context object containing correct resource properties
      */
-    public static Context setLocale(Context context, String language) {
+    public static Context setLocale(final Context context, final String language) {
         persist(context, language);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -60,7 +60,7 @@ public class LocaleHelper {
      * @param defaultLanguage The default language code
      * @return The language code that is stored in the shared preferences
      */
-    private static String getPersistedData(Context context, String defaultLanguage) {
+    private static String getPersistedData(final Context context, final String defaultLanguage) {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString("language", defaultLanguage);
     }
@@ -71,9 +71,9 @@ public class LocaleHelper {
      * @param context  The Context object that can be used to store preferences
      * @param language The language code that should be stored
      */
-    private static void persist(Context context, String language) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
+    private static void persist(final Context context, final String language) {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString("language", language);
         editor.apply();
@@ -87,7 +87,7 @@ public class LocaleHelper {
      * @return The Context object containing correct resource properties
      */
     @TargetApi(Build.VERSION_CODES.N)
-    private static Context updateResources(Context context, String language) {
+    private static Context updateResources(final Context context, final String language) {
         final Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
@@ -104,7 +104,7 @@ public class LocaleHelper {
      * @param language The language code that should be applied to the Context object
      * @return The Context object containing correct resource properties
      */
-    private static Context updateResourcesLegacy(Context context, String language) {
+    private static Context updateResourcesLegacy(final Context context, final String language) {
         final Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
