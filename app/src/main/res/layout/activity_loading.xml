@@ -9,7 +9,6 @@
     tools:context=".gui.activity.LoadingActivity">
 
     <ImageView
-        android:id="@+id/ImgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"

@@ -1,11 +1,8 @@
 package com.codedead.advancedportchecker.domain.controller;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 
 import androidx.preference.PreferenceManager;
 
@@ -45,12 +42,7 @@ public class LocaleHelper {
      */
     public static Context setLocale(final Context context, final String language) {
         persist(context, language);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return updateResources(context, language);
-        }
-
-        return updateResourcesLegacy(context, language);
+        return updateResources(context, language);
     }
 
     /**
@@ -86,7 +78,6 @@ public class LocaleHelper {
      * @param language The language code that should be applied to the Context object
      * @return The Context object containing correct resource properties
      */
-    @TargetApi(Build.VERSION_CODES.N)
     private static Context updateResources(final Context context, final String language) {
         final Locale locale = new Locale(language);
         Locale.setDefault(locale);
@@ -95,25 +86,5 @@ public class LocaleHelper {
         configuration.setLocale(locale);
 
         return context.createConfigurationContext(configuration);
-    }
-
-    /**
-     * Update the resources of a Context object
-     *
-     * @param context  The Context object that should be configured
-     * @param language The language code that should be applied to the Context object
-     * @return The Context object containing correct resource properties
-     */
-    private static Context updateResourcesLegacy(final Context context, final String language) {
-        final Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-
-        final Resources resources = context.getResources();
-        final Configuration configuration = resources.getConfiguration();
-
-        configuration.locale = locale;
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-
-        return context;
     }
 }

@@ -42,13 +42,13 @@ public final class InfoFragment extends Fragment implements View.OnClickListener
         if (id == R.id.BtnWebsiteInfo) {
             if (getContext() == null)
                 return;
-            UtilController.openWebsite(getContext(), "https://codedead.com/?page_id=145");
+            UtilController.openWebsite(getContext(), "https://codedead.com/software/advanced-portchecker");
         } else if (id == R.id.BtnSendMail) {
             if (getActivity() == null)
                 return;
-            ShareCompat.IntentBuilder.from(getActivity())
+            new ShareCompat.IntentBuilder(getActivity())
                     .setType("message/rfc822")
-                    .addEmailTo("admin@codedead.com")
+                    .addEmailTo("support@codedead.com")
                     .setSubject("Advanced PortChecker - Android")
                     .setText("")
                     .setChooserTitle(getString(R.string.text_send_mail))

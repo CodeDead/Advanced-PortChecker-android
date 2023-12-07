@@ -19,12 +19,12 @@
     <PreferenceCategory app:title="@string/pref_header_general">
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:key="displayTimeOut"
             app:title="@string/string_display_timeouts" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:key="displayClosed"
             app:title="@string/string_display_closed" />
 
