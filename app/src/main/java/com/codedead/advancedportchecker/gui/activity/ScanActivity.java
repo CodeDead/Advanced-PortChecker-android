@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -71,6 +70,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     private NetworkUtils networkUtils;
     private String lastLanguage;
+    private int maxProgress;
+    private NotificationCompat.Builder mBuilder;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -139,7 +140,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
     @Override
     protected void onResume() {
-        final String selectedLanguage =sharedPreferences.getString("appLanguage", "en");
+        final String selectedLanguage = sharedPreferences.getString("appLanguage", "en");
         if (!lastLanguage.equals(selectedLanguage)) {
             LocaleHelper.setLocale(getApplicationContext(), selectedLanguage);
             recreate();
@@ -152,12 +153,13 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
             getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        displayTimedOut = sharedPreferences.getBoolean("displayTimeOut", true);
-        displayClosed = sharedPreferences.getBoolean("displayClosed", true);
+        displayTimedOut = sharedPreferences.getBoolean("displayTimeOut", false);
+        displayClosed = sharedPreferences.getBoolean("displayClosed", false);
         statusColorCoded = sharedPreferences.getBoolean("statusColorCoded", true);
         timeOut = Integer.parseInt(Objects.requireNonNull(sharedPreferences.getString("socketTimeout", "200")));
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
         displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
+
         super.onResume();
     }
 
@@ -233,35 +235,26 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      */
     private void vibrate() {
         final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (v == null) return;
+        if (v == null)
+            return;
 
         // Vibrate for 500 milliseconds
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            //deprecated in API 26
-            v.vibrate(500);
-        }
+        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
     /**
      * Create a notification channel to display notifications
      */
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final CharSequence name = getString(R.string.app_name);
-            final String description = getString(R.string.channel_description);
-            final int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            final NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            final NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
+        final CharSequence name = getString(R.string.app_name);
+        final String description = getString(R.string.channel_description);
+        final int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        final NotificationChannel channel = new NotificationChannel(name.toString(), name, importance);
+        channel.setDescription(description);
+
+        final NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
@@ -272,7 +265,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         final Intent intent = new Intent(this, ScanActivity.class);
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_network_wifi_24dp)
@@ -328,10 +321,23 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         }
 
         try {
-            final int max = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
-            pgbScan.setMax(max);
+            maxProgress = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
+            pgbScan.setMax(maxProgress);
             pgbScan.setProgress(0);
             progress = 0;
+
+            if (displayNotification) {
+                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
+                        .setSmallIcon(R.drawable.ic_network_wifi_24dp)
+                        .setContentTitle(getString(R.string.scan_progress))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setOnlyAlertOnce(true)
+                        .setProgress(maxProgress, 0, false);
+
+                notificationManager.notify(69, mBuilder.build());
+            }
 
             scanController = new ScanController(this.getApplicationContext(), edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
             scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -348,8 +354,15 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Cancel a scan
      */
     private void stopScan() {
-        if (scanController == null) return;
+        if (scanController == null)
+            return;
+
         scanController.cancel(true);
+
+        if (displayNotification) {
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(69);
+        }
     }
 
     @Override
@@ -404,6 +417,11 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         if (displayNotification && !active) {
             displayNotification();
         }
+
+        if (displayNotification) {
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(69);
+        }
     }
 
     @Override
@@ -424,27 +442,24 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         ForegroundColorSpan colorSpan;
 
         switch (scanProgress.getStatus()) {
-            case TIMEOUT:
+            case TIMEOUT -> {
                 scanStatus = getString(R.string.string_timeout);
                 colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_orange_dark));
-
                 if (!displayTimedOut) {
                     display = false;
                 }
-                break;
-            default:
-            case CLOSED:
+            }
+            default -> {
                 scanStatus = getString(R.string.string_closed);
                 colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_red_dark));
-
                 if (!displayClosed) {
                     display = false;
                 }
-                break;
-            case OPEN:
+            }
+            case OPEN -> {
                 scanStatus = getString(R.string.string_open);
                 colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-                break;
+            }
         }
 
         if (display) {
@@ -462,5 +477,12 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         }
 
         pgbScan.setProgress(progress);
+
+        if (displayNotification) {
+            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mBuilder.setProgress(maxProgress, progress, false);
+            notificationManager.notify(69, mBuilder.build());
+        }
     }
 }

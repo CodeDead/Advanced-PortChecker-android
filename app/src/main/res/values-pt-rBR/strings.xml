@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Cancelar</string>
     <string name="string_about">Sobre</string>
     <string name="string_help">Ajuda</string>
-    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por:\nGoogle\n\nTraduções:\n- Português (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2021 CodeDead</string>
+    <string name="text_about">Advanced PortChecker foi criado por DeadLine.\n\nEste aplicativo pode ser utilizado para escanear portas TCP abertas em determinados hosts. Por favor, certifique-se de que você tenha a devida autorização antes de escanear um host!\n\nImagens por:\nGoogle\n\nTraduções:\n- Português (Brasil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2023 CodeDead</string>
     <string name="text_help">O Advanced PortChecker é um aplicativo que você pode utilizar para encontrar portas TCP abertas/fechadas em um determinado host. Por favor, certifique-se de ter a devida autorização antes de escanear um host!\n\n Uma porta TCP vai de 1 à 65535.\nO \'time-out\' é o tempo máximo que uma conexão leva para se conectar à uma determinada porta. Se sua Internet é lenta e/ou irresponsiva, é recomendado que você aumente o tempo limite de resposta, pois os resultados finais poderão ser influenciados e/ou afetados por conta disso.\n\n Se chegar à encontrar algum bug, você é totalmente bem-vindo a nos enviar um email!</string>
     <string name="text_send_mail">Envie-nos um email!</string>
     <string name="title_activity_settings">Configurações - Advanced PortChecker</string>
@@ -34,7 +34,7 @@
     <string name="string_clear_output">Limpar conteúdo</string>
     <string name="string_settings">Configurações</string>
     <string name="string_exit">Sair</string>
-    <string name="string_display_notification_scan_finished">Exibir uma notificações quando o escaneamento for concluído</string>
+    <string name="string_display_notification_scan_finished">Exibir notificações de verificação</string>
     <string name="string_notification_scan_complete">O escaneamento foi concluído!</string>
     <string name="channel_description">Notificações do Advanced PortChecker</string>
     <string name="title_activity_about">Advanced PortChecker - Sobre</string>
@@ -48,4 +48,6 @@
     <string name="asyncResponse_null_exception">O AsyncResponse delegate não pode ser nulo!</string>
     <string name="scanStatus_colorCoded">Cor do status da verificação</string>
     <string name="scanStatus_colorCoded_summary">O status de uma porta será codificada por cores</string>
+    <string name="notifications_no_permissions">Permissões de notificação são necessárias para enviar uma mensagem</string>
+    <string name="scan_progress">Progresso de digitalização</string>
 </resources>

@@ -127,14 +127,10 @@ public final class AboutActivity extends AppCompatActivity {
         Fragment fragment;
 
         selectedFragment = selected;
-        switch (selected) {
-            default:
-            case 0:
-                fragment = aboutFragment;
-                break;
-            case 1:
-                fragment = infoFragment;
-                break;
+        if (selected == 1) {
+            fragment = infoFragment;
+        } else {
+            fragment = aboutFragment;
         }
 
         trans.replace(R.id.content, fragment);

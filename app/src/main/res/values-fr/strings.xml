@@ -9,7 +9,7 @@
     <string name="string_cancel_scan">Annuler</string>
     <string name="string_about">À propos</string>
     <string name="string_help">Aide</string>
-    <string name="text_about">Advanced PortChecker a été créé par DeadLine.\n\nCette application peut être utilisée pour analyser un hôte pour les ports TCP ouverts. Assurez-vous de disposer des autorisations appropriées avant de scanner un hôte!\n\nImages par:\nGoogle\n\nTraductions:\n- Portugais (Brésil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2021 CodeDead</string>
+    <string name="text_about">Advanced PortChecker a été créé par DeadLine.\n\nCette application peut être utilisée pour analyser un hôte pour les ports TCP ouverts. Assurez-vous de disposer des autorisations appropriées avant de scanner un hôte!\n\nImages par:\nGoogle\n\nTraductions:\n- Portugais (Brésil) - <a href="https://github.com/SnwMds">SnwMds</a>\n\nCopyright © 2023 CodeDead</string>
     <string name="text_help">Advanced PortChecker est une application que vous pouvez utiliser pour analyser un hôte pour les ports TCP ouverts/fermés. Veuillez vous assurer que vous avez la permission de scanner un hôte avant de commencer l\'analyse!\n\nUn port TCP est compris entre 1 et 65535.\nLe délai d\'attente est le temps qu\'il faut avant qu\'une connexion active soit fermée. Si votre connexion Internet est lente et/ou ne répond pas, il est recommandé d\'augmenter le délai d\'attente car vos résultats risquent de ne pas être exacts.\n\nSi vous trouvez un bug, vous pouvez nous envoyer un email!</string>
     <string name="text_send_mail">Envoyez-nous un mail!</string>
     <string name="title_activity_settings">Advanced PortChecker - Paramètres</string>
@@ -34,7 +34,7 @@
     <string name="string_clear_output">Effacer la sortie</string>
     <string name="string_settings">Paramètres</string>
     <string name="string_exit">Quitter</string>
-    <string name="string_display_notification_scan_finished">Afficher une notification lorsque l\'analyse est terminée</string>
+    <string name="string_display_notification_scan_finished">Afficher les notifications d\'analyse</string>
     <string name="string_notification_scan_complete">Le scan est terminé!</string>
     <string name="channel_description">Advanced PortChecker notifications</string>
     <string name="title_activity_about">Advanced PortChecker - À propos</string>
@@ -48,4 +48,6 @@
     <string name="scanStatus_colorCoded">Couleur de statut</string>
     <string name="asyncResponse_null_exception">Le délégué AsyncResponse ne peut pas être nul!</string>
     <string name="scanStatus_colorCoded_summary">Le statut d\'un port sera codé par couleur</string>
+    <string name="notifications_no_permissions">Des autorisations de notification sont requises pour envoyer un message</string>
+    <string name="scan_progress">Progression de l\'analyse</string>
 </resources>

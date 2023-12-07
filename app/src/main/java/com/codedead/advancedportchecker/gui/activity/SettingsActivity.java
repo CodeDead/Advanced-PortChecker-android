@@ -1,16 +1,21 @@
 package com.codedead.advancedportchecker.gui.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -44,16 +49,31 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private final SharedPreferences.OnSharedPreferenceChangeListener listener = (prefs, key) -> {
-        if (key.equals("appLanguage")) {
-            LocaleHelper.setLocale(getApplicationContext(), prefs.getString("appLanguage", "en"));
-            recreate();
-        } else if (key.equals("socketTimeout")) {
-            try {
-                Integer.parseInt(prefs.getString("socketTimeout", "200"));
-            } catch (NumberFormatException ex) {
-                final SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("socketTimeout", "200");
-                editor.apply();
+        if (key == null)
+            return;
+
+        switch (key) {
+            case "appLanguage" -> {
+                LocaleHelper.setLocale(getApplicationContext(), prefs.getString("appLanguage", "en"));
+                recreate();
+            }
+            case "socketTimeout" -> {
+                try {
+                    Integer.parseInt(prefs.getString("socketTimeout", "200"));
+                } catch (final NumberFormatException ex) {
+                    final SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("socketTimeout", "200");
+                    editor.apply();
+                }
+            }
+            case "notificationOnComplete" -> {
+                final boolean notify = prefs.getBoolean("notificationOnComplete", true);
+                if (notify && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.notifications_no_permissions, Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                    }
+                }
             }
         }
     };

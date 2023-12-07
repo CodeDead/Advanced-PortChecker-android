@@ -8,8 +8,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.CountDownTimer;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.PreferenceManager;
 
 import android.provider.Settings;
@@ -33,11 +36,16 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 
 public final class LoadingActivity extends AppCompatActivity {
 
-    private static final int ACTIVITY_SETTINGS_CODE = 1337;
-    private static final int ACTIVITY_WIFI_CODE = 443;
-
     private NetworkUtils networkUtils;
     private static boolean hasStopped;
+
+    private final ActivityResultLauncher<Intent> wifiResultLaunch = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> delayedWifiCheck());
+
+    private final ActivityResultLauncher<Intent> permissionResultLaunch = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> checkPermissions());
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -102,15 +110,25 @@ public final class LoadingActivity extends AppCompatActivity {
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
 
             // If some or all of the required permissions are not available, we need to request the user to grant them
             // Don't worry, this will only request permission to data that hasn't been given out yet
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE
-                    , Manifest.permission.CHANGE_WIFI_STATE
-                    , Manifest.permission.ACCESS_WIFI_STATE
-                    , Manifest.permission.INTERNET
-                    , Manifest.permission.VIBRATE}, 1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE
+                        , Manifest.permission.CHANGE_WIFI_STATE
+                        , Manifest.permission.ACCESS_WIFI_STATE
+                        , Manifest.permission.POST_NOTIFICATIONS
+                        , Manifest.permission.INTERNET
+                        , Manifest.permission.VIBRATE}, 1);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE
+                        , Manifest.permission.CHANGE_WIFI_STATE
+                        , Manifest.permission.ACCESS_WIFI_STATE
+                        , Manifest.permission.INTERNET
+                        , Manifest.permission.VIBRATE}, 1);
+            }
         } else {
             checkConnectivity();
         }
@@ -122,7 +140,7 @@ public final class LoadingActivity extends AppCompatActivity {
     private void continueLoading() {
         final Intent i = new Intent(this, ScanActivity.class);
 
-        new CountDownTimer(4000, 1000) {
+        new CountDownTimer(3000, 1000) {
             @Override
             public void onTick(final long millisUntilFinished) {
 
@@ -161,7 +179,7 @@ public final class LoadingActivity extends AppCompatActivity {
                         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, ACTIVITY_SETTINGS_CODE);
+                        permissionResultLaunch.launch(intent);
                     });
 
             builder.setNegativeButton(android.R.string.no,
@@ -177,17 +195,6 @@ public final class LoadingActivity extends AppCompatActivity {
         }
         // Check if Wifi connection is available
         checkConnectivity();
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == ACTIVITY_SETTINGS_CODE) {
-            // Make sure the request was successful
-            checkPermissions();
-        } else if (requestCode == ACTIVITY_WIFI_CODE) {
-            delayedWifiCheck();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -212,13 +219,9 @@ public final class LoadingActivity extends AppCompatActivity {
     private void wifiConfirmationCheck() {
         final DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS), ACTIVITY_WIFI_CODE);
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    // Close this app since an internet connection is required
-                    finish();
-                    break;
+                case DialogInterface.BUTTON_POSITIVE ->
+                        wifiResultLaunch.launch(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                case DialogInterface.BUTTON_NEGATIVE -> finish();
             }
         };
 
@@ -234,25 +237,13 @@ public final class LoadingActivity extends AppCompatActivity {
      * Check whether an internet connection is available after a certain amount of time has passed
      */
     private void delayedWifiCheck() {
-        new CountDownTimer(10000, 1000) {
-            @Override
-            public void onTick(long l) {
-                // Do nothing
-            }
-
-            @Override
-            public void onFinish() {
-                // No need for this code if the app is already finishing
-                if (isFinishing()) return;
-                if (networkUtils.hasNetworkConnection()) {
-                    // Load the next screen because an internet connection is available
-                    continueLoading();
-                } else {
-                    // Close app because no internet connection is available
-                    Toast.makeText(LoadingActivity.this, R.string.string_no_internet, Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-        }.start();
+        if (networkUtils.hasNetworkConnection()) {
+            // Load the next screen because an internet connection is available
+            continueLoading();
+        } else {
+            // Close app because no internet connection is available
+            Toast.makeText(LoadingActivity.this, R.string.string_no_internet, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 }
