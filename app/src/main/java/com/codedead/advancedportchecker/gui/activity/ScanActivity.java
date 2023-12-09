@@ -268,7 +268,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
-                .setSmallIcon(R.drawable.ic_network_wifi_24dp)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.string_notification_scan_complete))
                 .setContentIntent(pendingIntent)
@@ -330,7 +330,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                 final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
-                        .setSmallIcon(R.drawable.ic_network_wifi_24dp)
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setContentTitle(getString(R.string.scan_progress))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setOnlyAlertOnce(true)
