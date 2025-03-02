@@ -66,6 +66,11 @@
             app:title="@string/string_display_notification_scan_finished" />
 
         <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="scanProgressNotification"
+            app:title="@string/string_display_scan_progress_notifications" />
+
+        <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="vibrateOnComplete"
             app:title="@string/string_vibrate_on_complete" />
