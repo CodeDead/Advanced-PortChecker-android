@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import androidx.appcompat.app.AlertDialog;
 
+import android.util.Log;
 import android.util.Patterns;
 
 public final class UtilController {
@@ -23,7 +24,7 @@ public final class UtilController {
 
             context.startActivity(intent);
         } catch (final Exception ex) {
-            ex.printStackTrace();
+            Log.e(UtilController.class.getSimpleName(), "An error occurred while trying to open the website: " + ex.getMessage());
         }
     }
 
@@ -52,7 +53,7 @@ public final class UtilController {
      * @param address The address that needs to be verified
      * @return True if the input is a valid WEB URL or IP address
      */
-    static boolean isValidAddress(String address) {
+    static boolean isValidAddress(final String address) {
         return Patterns.WEB_URL.matcher(address).matches() || Patterns.IP_ADDRESS.matcher(address).matches();
     }
 }

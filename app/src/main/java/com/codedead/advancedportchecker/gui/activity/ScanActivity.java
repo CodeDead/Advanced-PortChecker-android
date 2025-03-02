@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -24,6 +23,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +43,7 @@ import com.codedead.advancedportchecker.domain.interfaces.AsyncResponse;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
@@ -54,10 +55,9 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     private EditText edtOutput;
     private Button btnScan;
     private ProgressBar pgbScan;
-
     private ScanController scanController;
-    private int progress;
-
+    private boolean isScanning;
+    private AtomicInteger progress;
     private SharedPreferences sharedPreferences;
     private boolean displayTimedOut;
     private boolean displayClosed;
@@ -65,9 +65,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     private int timeOut;
     private boolean vibrateOnComplete;
     private boolean displayNotification;
-
+    private boolean displayScanProgressNotifications;
     private boolean active;
-
     private NetworkUtils networkUtils;
     private String lastLanguage;
     private int maxProgress;
@@ -83,6 +82,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        scanController = new ScanController(this.getApplicationContext(), this);
+
         edtHost = findViewById(R.id.EdtHost);
         edtStartPort = findViewById(R.id.EdtStartPort);
         edtEndPort = findViewById(R.id.EdtEndPort);
@@ -93,12 +94,10 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         edtOutput.setKeyListener(null);
 
         btnScan.setOnClickListener(v -> {
-            if (scanController != null && !scanController.isCancelled()) {
+            if (isScanning) {
                 stopScan();
-            } else if (scanController == null) {
-                startScan();
             } else {
-                UtilController.showAlert(ScanActivity.this, getString(R.string.string_wait_scancontroller));
+                startScan();
             }
         });
 
@@ -159,6 +158,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         timeOut = Integer.parseInt(Objects.requireNonNull(sharedPreferences.getString("socketTimeout", "200")));
         vibrateOnComplete = sharedPreferences.getBoolean("vibrateOnComplete", true);
         displayNotification = sharedPreferences.getBoolean("notificationOnComplete", true);
+        displayScanProgressNotifications = sharedPreferences.getBoolean("scanProgressNotification", false);
 
         super.onResume();
     }
@@ -173,9 +173,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         final Random rnd = new Random();
 
         new CountDownTimer(rnd.nextInt(180) * 1000, 1000) {
-
             @Override
-            public void onTick(long millisUntilFinished) {
+            public void onTick(final long millisUntilFinished) {
             }
 
             @Override
@@ -185,7 +184,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                 builder.setMessage(R.string.alert_review_text);
                 builder.setCancelable(false);
 
-                builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
+                builder.setPositiveButton(R.string.yes, (dialog, id) -> {
                     dialog.cancel();
 
                     addReview(true);
@@ -197,7 +196,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                     addReview(true);
                 });
 
-                builder.setNegativeButton(android.R.string.no, (dialog, which) -> {
+                builder.setNegativeButton(R.string.no, (dialog, which) -> {
                     dialog.cancel();
                     addReview(false);
                 });
@@ -218,7 +217,7 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      *
      * @param done True if the user has reviewed or does not want to review the application
      */
-    private void addReview(boolean done) {
+    private void addReview(final boolean done) {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (done) {
@@ -302,20 +301,17 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Start a new scan
      */
     private void startScan() {
-        if (scanController != null && !scanController.isCancelled())
-            return;
-
         if (!networkUtils.hasNetworkConnection()) {
             UtilController.showAlert(this, getString(R.string.string_no_internet));
             return;
         }
 
-        if (edtStartPort.getText().toString().length() == 0) {
+        if (edtStartPort.getText().toString().isEmpty()) {
             UtilController.showAlert(this, getString(R.string.string_invalid_startport));
             return;
         }
 
-        if (edtEndPort.getText().toString().length() == 0) {
+        if (edtEndPort.getText().toString().isEmpty()) {
             UtilController.showAlert(this, getString(R.string.string_invalid_endport));
             return;
         }
@@ -324,27 +320,29 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
             maxProgress = Integer.parseInt(edtEndPort.getText().toString()) - Integer.parseInt(edtStartPort.getText().toString()) + 1;
             pgbScan.setMax(maxProgress);
             pgbScan.setProgress(0);
-            progress = 0;
+            progress = new AtomicInteger(0);
 
-            if (displayNotification) {
+            if (displayNotification || displayScanProgressNotifications) {
                 final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
                 mBuilder = new NotificationCompat.Builder(this, getString(R.string.app_name))
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle(getString(R.string.scan_progress))
+                        .setContentTitle(getString(R.string.scan_running))
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setOnlyAlertOnce(true)
-                        .setProgress(maxProgress, 0, false);
+                        .setOnlyAlertOnce(true);
+
+                if (displayScanProgressNotifications)
+                    mBuilder.setProgress(maxProgress, 0, false);
 
                 notificationManager.notify(69, mBuilder.build());
             }
 
-            scanController = new ScanController(this.getApplicationContext(), edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut, this);
-            scanController.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
             edtOutput.setText("");
             btnScan.setText(getString(R.string.string_cancel_scan));
             setControlModifiers(!edtHost.isEnabled());
+
+            isScanning = true;
+            scanController.startScan(edtHost.getText().toString(), Integer.parseInt(edtStartPort.getText().toString()), Integer.parseInt(edtEndPort.getText().toString()), timeOut);
         } catch (final Exception ex) {
             UtilController.showAlert(this, ex.getMessage());
         }
@@ -354,15 +352,22 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
      * Cancel a scan
      */
     private void stopScan() {
-        if (scanController == null)
-            return;
+        try {
+            scanController.cancelScan();
+        } catch (final InterruptedException e) {
+            Log.e("ScanActivity", "An error occurred while trying to cancel the scan: " + e.getMessage());
+        }
 
-        scanController.cancel(true);
+        isScanning = false;
 
         if (displayNotification) {
             final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(69);
         }
+
+        setControlModifiers(true);
+        addCancelText();
+        btnScan.setText(getString(R.string.string_scan));
     }
 
     @Override
@@ -398,10 +403,15 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
         edtOutput.append(getString(R.string.string_scan_cancelled));
     }
 
-    @Override
-    public void scanComplete() {
+    /**
+     * Add text to the output to indicate that a scan was completed
+     */
+    private void scanComplete() {
+        if (!isScanning)
+            return;
+
         setControlModifiers(true);
-        scanController = null;
+        isScanning = false;
 
         if (!edtOutput.getText().toString().isEmpty()) {
             edtOutput.append("\n");
@@ -425,16 +435,8 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
     }
 
     @Override
-    public void scanCancelled() {
-        setControlModifiers(true);
-        scanController = null;
-        addCancelText();
-        btnScan.setText(getString(R.string.string_scan));
-    }
-
-    @Override
     public void update(final ScanProgress scanProgress) {
-        progress++;
+        progress.incrementAndGet();
 
         boolean display = true;
 
@@ -449,6 +451,10 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                     display = false;
                 }
             }
+            case OPEN -> {
+                scanStatus = getString(R.string.string_open);
+                colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_green_dark));
+            }
             default -> {
                 scanStatus = getString(R.string.string_closed);
                 colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_red_dark));
@@ -456,33 +462,36 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
                     display = false;
                 }
             }
-            case OPEN -> {
-                scanStatus = getString(R.string.string_open);
-                colorSpan = new ForegroundColorSpan(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-            }
         }
 
-        if (display) {
-            Spannable coloredText = new SpannableString(scanStatus);
-            if (!edtOutput.getText().toString().isEmpty()) {
-                edtOutput.append("\n");
+        final boolean finalDisplay = display;
+        runOnUiThread(() -> {
+            if (finalDisplay) {
+                final Spannable coloredText = new SpannableString(scanStatus);
+                if (!edtOutput.getText().toString().isEmpty()) {
+                    edtOutput.append("\n");
+                }
+
+                if (statusColorCoded) {
+                    coloredText.setSpan(colorSpan, 0, scanStatus.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+                edtOutput.append(scanProgress.getFullHost() + " | ");
+                edtOutput.append(coloredText);
             }
 
-            if (statusColorCoded) {
-                coloredText.setSpan(colorSpan, 0, scanStatus.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            pgbScan.setProgress(progress.get());
+
+            if (displayScanProgressNotifications) {
+                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                mBuilder.setProgress(maxProgress, progress.get(), false);
+                notificationManager.notify(69, mBuilder.build());
             }
+        });
 
-            edtOutput.append(scanProgress.getFullHost() + " | ");
-            edtOutput.append(coloredText);
-        }
-
-        pgbScan.setProgress(progress);
-
-        if (displayNotification) {
-            final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mBuilder.setProgress(maxProgress, progress, false);
-            notificationManager.notify(69, mBuilder.build());
+        if (progress.get() == maxProgress) {
+            runOnUiThread(this::scanComplete);
         }
     }
 }

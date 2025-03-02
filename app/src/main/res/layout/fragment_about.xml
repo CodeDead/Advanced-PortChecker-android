@@ -42,11 +42,11 @@
                 app:srcCompat="@drawable/ic_facebook_icon" />
 
             <ImageButton
-                android:id="@+id/BtnTwitter"
+                android:id="@+id/BtnBluesky"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/string_logo"
-                app:srcCompat="@drawable/ic_twitter_icon" />
+                app:srcCompat="@drawable/bluesky_logo" />
 
             <ImageButton
                 android:id="@+id/BtnWebsiteAbout"

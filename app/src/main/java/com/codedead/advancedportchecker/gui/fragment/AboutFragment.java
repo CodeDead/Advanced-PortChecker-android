@@ -30,12 +30,12 @@ public final class AboutFragment extends Fragment implements View.OnClickListene
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
 
         final ImageButton btnFacebook = v.findViewById(R.id.BtnFacebook);
-        final ImageButton btnTwitter = v.findViewById(R.id.BtnTwitter);
+        final ImageButton btnBluesky = v.findViewById(R.id.BtnBluesky);
         final ImageButton btnWebsite = v.findViewById(R.id.BtnWebsiteAbout);
         final TextView txtAbout = v.findViewById(R.id.TxtAbout);
 
         btnFacebook.setOnClickListener(this);
-        btnTwitter.setOnClickListener(this);
+        btnBluesky.setOnClickListener(this);
         btnWebsite.setOnClickListener(this);
         txtAbout.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -50,8 +50,8 @@ public final class AboutFragment extends Fragment implements View.OnClickListene
         int id = v.getId();
         if (id == R.id.BtnFacebook) {
             UtilController.openWebsite(getContext(), "https://facebook.com/deadlinecodedead/");
-        } else if (id == R.id.BtnTwitter) {
-            UtilController.openWebsite(getContext(), "https://twitter.com/C0DEDEAD");
+        } else if (id == R.id.BtnBluesky) {
+            UtilController.openWebsite(getContext(), "https://bsky.app/profile/codedead.com");
         } else if (id == R.id.BtnWebsiteAbout) {
             UtilController.openWebsite(getContext(), "https://codedead.com/");
         }

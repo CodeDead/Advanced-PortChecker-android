@@ -13,6 +13,9 @@ import android.os.CountDownTimer;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.preference.PreferenceManager;
 
 import android.provider.Settings;
@@ -25,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.codedead.advancedportchecker.R;
@@ -55,9 +59,13 @@ public final class LoadingActivity extends AppCompatActivity {
         resetTitle();
         super.onCreate(savedInstanceState);
 
+        final Window window = getWindow();
         final View decorView = getWindow().getDecorView();
-        final int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+        final WindowInsetsControllerCompat controllerCompat = new WindowInsetsControllerCompat(window, decorView);
+        controllerCompat.hide(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.navigationBars());
+        controllerCompat.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
 
         setContentView(R.layout.activity_loading);
         networkUtils = new NetworkUtils(this);
@@ -172,7 +180,7 @@ public final class LoadingActivity extends AppCompatActivity {
             builder.setMessage(R.string.string_give_manual_permissions);
             builder.setCancelable(false);
 
-            builder.setPositiveButton(android.R.string.yes,
+            builder.setPositiveButton(R.string.yes,
                     (dialog, id) -> {
                         dialog.cancel();
                         Intent intent = new Intent();
@@ -182,7 +190,7 @@ public final class LoadingActivity extends AppCompatActivity {
                         permissionResultLaunch.launch(intent);
                     });
 
-            builder.setNegativeButton(android.R.string.no,
+            builder.setNegativeButton(R.string.no,
                     (dialog, id) -> {
                         Toast.makeText(LoadingActivity.this, R.string.string_networkpermissions_required, Toast.LENGTH_SHORT).show();
                         finish();
@@ -228,8 +236,8 @@ public final class LoadingActivity extends AppCompatActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(LoadingActivity.this);
         builder.setMessage(R.string.string_enable_wifi)
                 .setCancelable(false)
-                .setPositiveButton(android.R.string.yes, dialogClickListener)
-                .setNegativeButton(android.R.string.no, dialogClickListener)
+                .setPositiveButton(R.string.yes, dialogClickListener)
+                .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
     }
 

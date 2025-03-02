@@ -32,7 +32,6 @@
             android:theme="@style/LoadingTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -43,5 +42,4 @@
             android:name=".gui.activity.AboutActivity"
             android:label="@string/title_activity_about" />
     </application>
-
 </manifest>
