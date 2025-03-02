@@ -15,7 +15,7 @@ https://play.google.com/store/apps/details?id=com.codedead.advancedportchecker
 
 This library is maintained by CodeDead. You can find more about us using the following links:
 * [Website](https://codedead.com/)
-* [Twitter](https://twitter.com/C0DEDEAD/)
+* [Bluesky](https://bsky.app/profile/codedead.com)
 * [Facebook](https://facebook.com/deadlinecodedead/)
 
-Copyright © 2023 CodeDead
+Copyright © 2025 CodeDead

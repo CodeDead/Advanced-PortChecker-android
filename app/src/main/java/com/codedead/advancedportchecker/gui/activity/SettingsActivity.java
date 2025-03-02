@@ -75,6 +75,15 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
             }
+            case "scanProgressNotification" -> {
+                final boolean notify = prefs.getBoolean("scanProgressNotification", true);
+                if (notify && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, R.string.notifications_no_permissions, Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                    }
+                }
+            }
         }
     };
 

@@ -1,7 +1,6 @@
 package com.codedead.advancedportchecker.domain.controller;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.codedead.advancedportchecker.R;
 import com.codedead.advancedportchecker.domain.object.ScanProgress;
@@ -11,31 +10,45 @@ import com.codedead.advancedportchecker.domain.object.ScanStatus;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
+public final class ScanController {
 
-    private final String host;
-    private final int startPort;
-    private final int endPort;
-    private final int timeOut;
-
+    private final Context context;
+    private ExecutorService executorService;
+    private final int poolSize;
     private final AsyncResponse response;
 
     /**
      * Initialize a new ScanController
      *
-     * @param context   The context that can be used to retrieve error messages
-     * @param host      The host address that needs to be scanned
+     * @param context  The context that can be used to retrieve error messages
+     * @param response The AsyncResponse that can be called when a scan has finished or been cancelled
+     */
+    public ScanController(final Context context,
+                          final AsyncResponse response) {
+        if (context == null)
+            throw new NullPointerException("Context cannot be null!");
+
+        this.context = context;
+
+        final int numberOfCores = Runtime.getRuntime().availableProcessors();
+        poolSize = Math.max(2, Math.min(numberOfCores * 2, 4));
+
+        this.response = response;
+    }
+
+    /**
+     * Start scanning a host for open ports
+     *
+     * @param host      The host that needs to be scanned
      * @param startPort The initial port for a range of ports that need to be scanned
      * @param endPort   The final port in a range of ports that need to be scanned
      * @param timeOut   The time it takes before a connection is marked as timed-out
-     * @param response  The AsyncResponse that can be called when a scan has finished or been cancelled
      */
-    public ScanController(final Context context, String host, final int startPort,
-                          final int endPort, final int timeOut,
-                          final AsyncResponse response) {
-
-        if (context == null) throw new NullPointerException("Context cannot be null!");
+    public void startScan(String host, final int startPort, final int endPort, final int timeOut) {
         if (host == null || host.isEmpty() || !UtilController.isValidAddress(host))
             throw new IllegalArgumentException(context.getString(R.string.string_invalid_host));
         if (response == null)
@@ -50,43 +63,59 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         if (endPort > 65535)
             throw new IllegalArgumentException(context.getString(R.string.string_largest_possible_port));
 
+        final int totalNumberOfPorts = endPort - startPort + 1;
+        // Divide the total number of ports by the number of cores
+        final int numberOfPortsPerThread = totalNumberOfPorts / poolSize;
+        // Calculate the remaining ports that need to be scanned
+        final int remainingPorts = totalNumberOfPorts % poolSize;
+
+        executorService = Executors.newFixedThreadPool(Math.min(totalNumberOfPorts, poolSize));
+
         host = host
                 .replace("http://", "")
                 .replace("https://", "")
-                .replace("ftp://", "");
+                .replace("ftp://", "")
+                .replace("ssh://", "")
+                .replace("telnet://", "")
+                .replace("smtp://", "");
 
-        this.host = host;
-        this.startPort = startPort;
-        this.endPort = endPort;
-        this.timeOut = timeOut;
-        this.response = response;
-    }
 
-    @Override
-    protected Void doInBackground(final Void... voids) {
-        int currentPort = startPort;
-        while (currentPort <= endPort) {
-            if (isCancelled()) {
-                break;
+        final String finalHost = host;
+        for (int i = 0; i < poolSize; i++) {
+            final int currentStartPort = startPort + i * numberOfPortsPerThread;
+            int currentEndPort = currentStartPort + numberOfPortsPerThread - 1;
+
+            if (i == poolSize - 1) {
+                // Add the remaining ports to the last thread
+                currentEndPort += remainingPorts;
             }
-            publishProgress(scanTcp(host, currentPort, timeOut));
-            currentPort++;
+
+            int finalCurrentEndPort = currentEndPort;
+            executorService.execute(() -> {
+                // Loop over the ports to scan
+                for (int currentPort = currentStartPort; currentPort <= finalCurrentEndPort; currentPort++) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        break;
+                    }
+                    final ScanProgress scan = scanTcp(finalHost, currentPort, timeOut);
+                    response.update(scan);
+                }
+            });
         }
-        return null;
     }
 
-    @Override
-    protected void onPostExecute(final Void aVoid) {
-        response.scanComplete();
-        super.onPostExecute(aVoid);
-    }
+    /**
+     * Cancel the current scan
+     *
+     * @throws InterruptedException If the cancellation cannot be awaited
+     */
+    public void cancelScan() throws InterruptedException {
+        if (executorService == null)
+            return;
 
-    @Override
-    protected void onProgressUpdate(final ScanProgress... values) {
-        if (isCancelled()) return;
-
-        response.update(values[0]);
-        super.onProgressUpdate(values);
+        executorService.shutdownNow();
+        //noinspection ResultOfMethodCallIgnored
+        executorService.awaitTermination(30000, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -111,11 +140,5 @@ public final class ScanController extends AsyncTask<Void, ScanProgress, Void> {
         }
 
         return scan;
-    }
-
-    @Override
-    protected void onCancelled() {
-        response.scanCancelled();
-        super.onCancelled();
     }
 }

@@ -4,27 +4,19 @@
 
     <item
         android:id="@+id/nav_scan_clear_output"
-        android:title="@string/string_clear_output">
-
-    </item>
+        android:title="@string/string_clear_output" />
 
     <item
         android:id="@+id/nav_scan_settings"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/string_settings"
-        app:showAsAction="ifRoom">
-
-    </item>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nav_scan_about"
-        android:title="@string/string_about">
-
-    </item>
+        android:title="@string/string_about" />
 
     <item
         android:id="@+id/nav_scan_exit"
-        android:title="@string/string_exit">
-
-    </item>
+        android:title="@string/string_exit" />
 </menu>
