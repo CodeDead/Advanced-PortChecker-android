@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:id="@+id/main"
     tools:context=".gui.activity.ScanActivity">
 
     <androidx.cardview.widget.CardView
