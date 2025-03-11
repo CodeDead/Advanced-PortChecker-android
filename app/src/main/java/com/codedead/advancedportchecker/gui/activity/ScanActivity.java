@@ -12,7 +12,11 @@ import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -80,7 +84,13 @@ public final class ScanActivity extends AppCompatActivity implements AsyncRespon
 
         resetTitle();
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_scan);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            final Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         scanController = new ScanController(this.getApplicationContext(), this);
 

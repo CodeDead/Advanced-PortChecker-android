@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="Base.Theme.AdvancedPortChecker" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.AdvancedPortChecker" parent="Base.Theme.AdvancedPortChecker" />
+
+    <style name="LoadingTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+</resources>
