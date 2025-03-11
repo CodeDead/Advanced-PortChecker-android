@@ -1,0 +1,10 @@
+Advanced PortChecker is a utility to check if TCP ports are open or not.
+
+<b>Features:</b>
+<ul>
+    <li>Scan TCP ports</li>
+    <li>Scans can be executed in the background</li>
+    <li>Scans are executed in real-time</li>
+    <li>Supports dark mode</li>
+    <li>No ads, no spyware, no tracking</li>
+</ul>

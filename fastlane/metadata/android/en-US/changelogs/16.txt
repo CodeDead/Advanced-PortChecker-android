@@ -1,0 +1,3 @@
+- Allow Android 10 users to run the app again
+- Improved dark mode
+- New icon design
