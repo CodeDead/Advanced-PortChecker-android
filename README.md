@@ -2,10 +2,16 @@
 
 Advanced PortChecker for Android is a variant of the [desktop application with the same name](https://github.com/CodeDead/Advanced-PortChecker).
 
-## Google Play
+## Download
 
-Advanced PortChecker is available in Google Play store, free of charge:  
-https://play.google.com/store/apps/details?id=com.codedead.advancedportchecker
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.codedead.advancedportchecker/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.codedead.advancedportchecker)
+
+Or download the latest APK from the [Releases Section](https://github.com/CodeDead/Advanced-PortChecker-android/releases/latest).
 
 ## Translations
 
