@@ -1,0 +1,13 @@
+Scannen von TCP-Ports war noch nie so einfach. Sehen Sie, wie <i>Advanced PortChecker</i> Sie beim Scannen mit Echtzeitinformationen aktualisiert!
+
+Benötigen Sie ein spezifisches Zeitlimit für den Port-Scan? Benachrichtigungen deaktivieren oder die Anwendungssprache ändern? Es ist alles möglich, dank unserer intuitiven und einfach zu bedienenden GUI.
+
+<b>Features:</b>
+
+<ul>
+    <li>Scan TCP Ports</li>
+    <li>Scans können im Hintergrund durchgeführt werden</li>
+    <li>Scans werden in Echtzeit durchgeführt</li>
+    <li>Unterstützt Dark-Mode</li>
+    <li>Keine Ads, keine Spyware, kein Tracking!</li>
+</ul>
