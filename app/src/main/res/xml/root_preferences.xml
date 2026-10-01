@@ -16,33 +16,40 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/pref_header_general">
+    <PreferenceCategory
+        app:singleLineTitle="false"
+        app:title="@string/pref_header_general">
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="displayTimeOut"
+            app:singleLineTitle="false"
             app:title="@string/string_display_timeouts" />
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="displayClosed"
+            app:singleLineTitle="false"
             app:title="@string/string_display_closed" />
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="statusColorCoded"
+            app:singleLineTitle="false"
             app:summary="@string/scanStatus_colorCoded_summary"
             app:title="@string/scanStatus_colorCoded" />
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="keepScreenOn"
+            app:singleLineTitle="false"
             app:summary="@string/string_screenOn_hint"
             app:title="@string/string_keep_screen_on" />
 
         <EditTextPreference
             app:defaultValue="200"
             app:key="socketTimeout"
+            app:singleLineTitle="false"
             app:summary="@string/string_socket_timeout_summary"
             app:title="@string/string_socket_timeout" />
 
@@ -53,26 +60,32 @@
             app:key="appLanguage"
             app:negativeButtonText="@null"
             app:positiveButtonText="@null"
+            app:singleLineTitle="false"
             app:summary="@string/string_applanguage_summary"
             app:title="@string/string_application_languages" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/pref_header_notifications">
+    <PreferenceCategory
+        app:singleLineTitle="false"
+        app:title="@string/pref_header_notifications">
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="notificationOnComplete"
+            app:singleLineTitle="false"
             app:title="@string/string_display_notification_scan_finished" />
 
         <SwitchPreferenceCompat
             app:defaultValue="false"
             app:key="scanProgressNotification"
+            app:singleLineTitle="false"
             app:title="@string/string_display_scan_progress_notifications" />
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="vibrateOnComplete"
+            app:singleLineTitle="false"
             app:title="@string/string_vibrate_on_complete" />
 
     </PreferenceCategory>
