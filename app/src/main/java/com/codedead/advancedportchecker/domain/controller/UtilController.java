@@ -36,6 +36,7 @@ public final class UtilController {
      */
     public static void showAlert(final Context context, final String message) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
         builder.setMessage(message);
         builder.setCancelable(true);
 

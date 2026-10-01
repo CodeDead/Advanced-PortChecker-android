@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 35
+    compileSdk 37
     namespace "com.codedead.advancedportchecker"
     defaultConfig {
         applicationId "com.codedead.advancedportchecker"
         minSdk 29
-        targetSdk 35
-        versionCode 17
-        versionName '1.5.4'
+        targetSdk 37
+        versionCode 18
+        versionName '1.5.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -28,19 +28,20 @@ android {
         includeInApk = false
         includeInBundle = false
     }
+    buildToolsVersion '37.0.0'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.core:core:1.15.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.core:core:1.19.1'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
+    implementation 'com.google.android.material:material:1.14.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 }
