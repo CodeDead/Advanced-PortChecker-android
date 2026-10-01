@@ -1,0 +1,4 @@
+- Dependency upgrades
+- UI improvements to the settings activity
+- Updated build target SDK
+- Updated dependencies
