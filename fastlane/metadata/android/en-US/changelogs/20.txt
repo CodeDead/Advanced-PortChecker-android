@@ -1,0 +1,2 @@
+- JDK upgrade
+- Switch to adoptium JDK
